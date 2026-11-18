@@ -1,0 +1,18 @@
+# Data and outputs stay outside the repo
+data/
+results/
+work/
+*.fa
+*.fasta
+*.fna
+*.faa
+*.gff
+*.gff3
+*.tsv.gz
+*.pkl
+*.dmnd
+.nextflow*
+__pycache__/
+.ipynb_checkpoints/
+# Licensed reference data (MetaCyc/BioCyc): never commit
+*.dat
