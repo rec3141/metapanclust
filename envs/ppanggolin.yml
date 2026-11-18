@@ -1,0 +1,4 @@
+name: ppanggolin
+channels: [conda-forge, bioconda]
+dependencies:
+  - ppanggolin
