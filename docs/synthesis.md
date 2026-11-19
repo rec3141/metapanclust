@@ -393,3 +393,13 @@ Ordered by value per cost. "Settles" names the decision each item makes.
     to carry two family definitions, one for assignment and one for prevalence?
 11. **Grex time.** pangbank_scale (about 100-150 CPU-h, 45 GB of downloads) is ready to submit and
     decides both levels (C13). Should it go ahead of the CAMI work?
+
+## Addendum: theory documents (19:55)
+
+Five derivations in docs/theory/ (phylo_prior, merge_test, population_frequency, calibrated_surprise, cluster_model). Corrections they make to the findings above:
+
+- **C14 (calibrated_surprise):** catalogue_surprise's absence-flags-contamination AUC 0.85 is circular through CheckM2 contamination in epsilon (0.54 without it). The usable signal is calibrated presence-direction excess (AUC ~0.96, no CheckM2 input, 10 positives). Split cells by q < 1/2, not by observed state.
+- **merge_test:** a gamma per-gene divergence model reproduces the grex failure ANIs (92.3/94.0/95.3-96.4% predicted vs 92-94/94-95/>=96% observed for cuts 0.80/0.90/0.95) and AUC within 0.01-0.03; an identity-based likelihood-ratio test needs ~7-26 genes per decision at the species boundary vs ~145 for the 0.80 cut.
+- **phylo_prior:** the rank beta-binomial is a moment match to a gain/loss process on the tree (cov = pi(1-pi)e^{-mu d}); explains kappa ~3 (family) and ~0.5 (genus) and why genus shrinkage loses once a species has >= 5 genomes.
+- **population_frequency:** precision is read-count limited (ell_eff ~3 kb); reproduces the >= 10 kb rule; coverage cannot separate f > 0.85 from 1; junction-spanning reads give linkage proof (decisive when abundance profiles are identical) and beat coverage only for elements < ~6 kb.
+- **cluster_model:** operon adjacencies are lost at ~0.53 x the neutral rate in both E. coli and B. subtilis (r 0.97); breaks in close relatives are evidence against an operon, which is why close genomes lowered accuracy.

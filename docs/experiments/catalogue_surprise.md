@@ -1,5 +1,8 @@
 # Level-1 surprise over catalogue families, Chesterfield 93 bins (2026-11-18)
 
+> **Correction (2026-11-18, docs/theory/calibrated_surprise.md):** the 'absence surprise per expected Mb flags contamination (AUC 0.85)' result is circular: the false-presence term epsilon contains CheckM2's own contamination estimate; recomputed without it the absence AUC is 0.54. The calibrated presence-direction excess (no CheckM2 input) reaches AUC 0.955-0.965 on the same 41 bins (10 positives; confirm on CAMI).
+
+
 This is the first cross-species surprise over the cluster catalogue (`catalogue.md`). It uses only the
 Chesterfield co-assembly: 93 bins x 7,178 families = 667,554 bin-family cells, 18,748 of them present
 (14,764 intact, 3,984 seen only at contig ends). Each bin is scored against a prior estimated from the
