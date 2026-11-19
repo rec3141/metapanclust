@@ -28,8 +28,13 @@ Full tables: `pangbank_scale_results.txt`.
 | kNN-8 (clade proxy) | 8.0 | 10.6 | 15.7 | 22.4 | 28.3 | 33.3 | 38.7 |
 
 The gain grows by about 9-10 points per doubling of N (median per species) and has not levelled off at 800
-genomes; it is mostly context, not clade structure (kNN reaches half as much). Best regularisation moves from
-C = 0.03-0.1 at small N to 0.3 at 800.
+genomes. Best regularisation moves from C = 0.03-0.1 at small N to 0.3 at 800.
+
+**Caveat (corrected 2026-11-19):** this run built no tree. The "kNN" baseline weights training genomes by
+Jaccard similarity of accessory-family content, a crude relatedness proxy, and the logistic model's inputs are
+those same accessory families, which also track phylogeny. So the context gain mixes gene-gene context with clade
+structure learned from gene content; that the crude proxy reaches about half as much does not show how much a real
+sequence-based tree would explain. The tree-vs-context run (experiments/tree_vs_context/) is set up to separate them.
 
 **B, genus shrinkage vs species-only empirical Bayes** (held-out bits per genome, m training genomes):
 
