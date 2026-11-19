@@ -1,0 +1,38 @@
+name	accession	level	group	organism
+Eco_Sakai	GCF_000008865.2	0	E. coli/Shigella strains	Escherichia coli O157:H7 Sakai
+Eco_CFT073	GCF_000007445.1	0	E. coli/Shigella strains	Escherichia coli CFT073
+Sfl_301	GCF_000006925.2	0	E. coli/Shigella strains	Shigella flexneri 2a 301
+Efe	GCF_020097475.1	1	Escherichia, other species	Escherichia fergusonii FDAARGOS_1499
+Eal	GCF_028622335.1	1	Escherichia, other species	Escherichia albertii BIA_5-2
+Ema	GCF_029962465.1	1	Escherichia, other species	Escherichia marmotae YF8
+Sen	GCF_000006945.2	2	Enterobacteriaceae, other genera	Salmonella enterica Typhimurium LT2
+Kpn	GCF_000240185.1	2	Enterobacteriaceae, other genera	Klebsiella pneumoniae HS11286
+Cko	GCF_000018045.1	2	Enterobacteriaceae, other genera	Citrobacter koseri ATCC BAA-895
+Ecl	GCF_905331265.2	2	Enterobacteriaceae, other genera	Enterobacter cloacae
+Csa	GCF_003516125.1	2	Enterobacteriaceae, other genera	Cronobacter sakazakii CS-931
+Ype	GCF_000009065.1	3	Enterobacterales, other families	Yersinia pestis CO92 (Yersiniaceae)
+Sma	GCF_030291735.1	3	Enterobacterales, other families	Serratia marcescens ELP1.10 (Yersiniaceae)
+Pat	GCF_000740965.1	3	Enterobacterales, other families	Pectobacterium atrosepticum 21A (Pectobacteriaceae)
+Pmi	GCF_000069965.1	3	Enterobacterales, other families	Proteus mirabilis HI4320 (Morganellaceae)
+Eam	GCF_043228865.1	3	Enterobacterales, other families	Erwinia amylovora EaSmR (Erwiniaceae)
+Vch	GCF_000006745.1	4	Gamma, other orders (GTDB Enterobacterales)	Vibrio cholerae N16961
+Hin	GCF_000027305.1	4	Gamma, other orders (GTDB Enterobacterales)	Haemophilus influenzae Rd KW20
+Son	GCF_000146165.2	4	Gamma, other orders (GTDB Enterobacterales)	Shewanella oneidensis MR-1
+Pae	GCF_000006765.1	5	Gamma, other orders (GTDB too)	Pseudomonas aeruginosa PAO1
+Aba	GCF_000046845.1	5	Gamma, other orders (GTDB too)	Acinetobacter baylyi ADP1
+Xca	GCF_013388375.1	5	Gamma, other orders (GTDB too)	Xanthomonas campestris MAFF106181
+Lpn	GCF_001941585.1	5	Gamma, other orders (GTDB too)	Legionella pneumophila Philadelphia-1
+Nme	GCF_000008805.1	6	Betaproteobacteria (GTDB Gamma order Burkholderiales)	Neisseria meningitidis MC58
+Bce	GCF_000009485.1	6	Betaproteobacteria (GTDB Gamma order Burkholderiales)	Burkholderia cenocepacia J2315
+Cvi	GCF_000022005.1	7	Alphaproteobacteria	Caulobacter vibrioides NA1000
+Csp	GCF_003324715.1	7	Alphaproteobacteria	Cereibacter sphaeroides 2.4.1
+Afa	GCF_000092025.1	7	Alphaproteobacteria	Agrobacterium fabrum C58
+Bsu	GCF_000009045.1	8	Other bacterial phyla	Bacillus subtilis 168
+Mtu	GCF_000195955.2	8	Other bacterial phyla	Mycobacterium tuberculosis H37Rv
+Bth	GCF_000011065.1	8	Other bacterial phyla	Bacteroides thetaiotaomicron VPI-5482
+Syn	GCF_000009725.1	8	Other bacterial phyla	Synechocystis sp. PCC 6803
+Tma	GCF_000230655.2	8	Other bacterial phyla	Thermotoga maritima MSB8
+Cje	GCF_000009085.1	8	Other bacterial phyla	Campylobacter jejuni NCTC 11168
+Mja	GCF_000091665.1	9	Archaea	Methanocaldococcus jannaschii DSM 2661
+Hsa	GCF_000006805.1	9	Archaea	Halobacterium salinarum NRC-1
+Sso	GCF_000007005.1	9	Archaea	Saccharolobus solfataricus P2

@@ -1,0 +1,93 @@
+name	accession	level	group	organism
+Bsu_3610	GCF_002055965.1	0	B. subtilis strains	Bacillus subtilis NCIB 3610
+Bsu_BSn5	GCF_000186745.1	0	B. subtilis strains	Bacillus subtilis BSn5
+Bsp_W23	GCF_000146565.1	0	B. subtilis strains	Bacillus spizizenii W23
+Bve	GCF_000015785.2	1	B. subtilis group, other species (GTDB g__Bacillus)	Bacillus velezensis FZB42
+Bli	GCF_034478925.1	1	B. subtilis group, other species (GTDB g__Bacillus)	Bacillus licheniformis ATCC 14580
+Bpu	GCF_000017885.4	1	B. subtilis group, other species (GTDB g__Bacillus)	Bacillus pumilus SAFR-032
+Bat	GCF_056632445.1	1	B. subtilis group, other species (GTDB g__Bacillus)	Bacillus atrophaeus 1942
+Bce_14579	GCF_006094295.1	2	GTDB o__Bacillales, other families	Bacillus cereus ATCC 14579 (f__Bacillaceae_G)
+Ban	GCF_000008445.1	2	GTDB o__Bacillales, other families	Bacillus anthracis Ames Ancestor (f__Bacillaceae_G)
+Pme	GCF_029537015.2	2	GTDB o__Bacillales, other families	Priestia megaterium DSM 319 (f__Bacillaceae_H)
+Gka	GCF_000009785.1	2	GTDB o__Bacillales, other families	Geobacillus kaustophilus HTA426 (f__Anoxybacillaceae)
+Afl	GCF_000019045.1	2	GTDB o__Bacillales, other families	Anoxybacillus flavithermus WK1 (f__Anoxybacillaceae)
+Hha	GCF_000011145.1	3	NCBI Bacillales, other GTDB orders	Halalkalibacterium halodurans C-125 (o__Bacillales_H)
+Scl	GCF_000009825.1	3	NCBI Bacillales, other GTDB orders	Shouchella clausii KSM-K16 (o__Bacillales_H)
+Oih	GCF_000011245.1	3	NCBI Bacillales, other GTDB orders	Oceanobacillus iheyensis HTE831 (o__Bacillales_D)
+Lsp	GCF_000017965.1	3	NCBI Bacillales, other GTDB orders	Lysinibacillus sphaericus C3-41 (o__Bacillales_A = Caryophanales)
+Ppo	GCF_014706575.1	3	NCBI Bacillales, other GTDB orders	Paenibacillus polymyxa E681 (o__Paenibacillales)
+Bbr	GCF_000010165.1	3	NCBI Bacillales, other GTDB orders	Brevibacillus brevis NBRC 100599 (o__Brevibacillales)
+Esi	GCF_000019905.1	3	NCBI Bacillales, other GTDB orders	Exiguobacterium sibiricum 255-15 (o__Exiguobacteriales)
+Aac	GCF_000024285.1	3	NCBI Bacillales, other GTDB orders	Alicyclobacillus acidocaldarius DSM 446 (o__Alicyclobacillales)
+Sau	GCF_000013425.1	3	NCBI Bacillales, other GTDB orders	Staphylococcus aureus NCTC 8325 (o__Staphylococcales)
+Lmo	GCF_000196035.1	3	NCBI Bacillales, other GTDB orders	Listeria monocytogenes EGD-e (GTDB o__Lactobacillales)
+Lla	GCF_003722275.1	4	Other Bacilli (Lactobacillales, Erysipelotrichales)	Lactococcus lactis IL1403
+Spn	GCF_000006885.1	4	Other Bacilli (Lactobacillales, Erysipelotrichales)	Streptococcus pneumoniae TIGR4
+Efa	GCF_000007785.1	4	Other Bacilli (Lactobacillales, Erysipelotrichales)	Enterococcus faecalis V583
+Lpl	GCF_000203855.3	4	Other Bacilli (Lactobacillales, Erysipelotrichales)	Lactiplantibacillus plantarum WCFS1
+Erh	GCF_000270085.1	4	Other Bacilli (Lactobacillales, Erysipelotrichales)	Erysipelothrix rhusiopathiae Fujisawa
+Cac	GCF_000218855.1	5	Other Bacillota (Clostridia, Negativicutes, ...)	Clostridium acetobutylicum DSM 1731
+Cdi	GCF_000009205.2	5	Other Bacillota (Clostridia, Negativicutes, ...)	Clostridioides difficile 630
+Dha	GCF_000010045.1	5	Other Bacillota (Clostridia, Negativicutes, ...)	Desulfitobacterium hafniense Y51
+Mth	GCF_006228565.1	5	Other Bacillota (Clostridia, Negativicutes, ...)	Moorella thermoacetica ATCC 39073-HH
+Vpa	GCF_000024945.1	5	Other Bacillota (Clostridia, Negativicutes, ...)	Veillonella parvula DSM 2008
+Csu	GCF_000007085.1	5	Other Bacillota (Clostridia, Negativicutes, ...)	Caldanaerobacter subterraneus tengcongensis MB4
+Mtu	GCF_000195955.2	6	Other Terrabacteria phyla (Actinomycetota, Cyanobacteria, Chloroflexota, Deinococcota)	Mycobacterium tuberculosis H37Rv
+Sco	GCF_000203835.1	6	Other Terrabacteria phyla (Actinomycetota, Cyanobacteria, Chloroflexota, Deinococcota)	Streptomyces coelicolor A3(2)
+Syn	GCF_000009725.1	6	Other Terrabacteria phyla (Actinomycetota, Cyanobacteria, Chloroflexota, Deinococcota)	Synechocystis sp. PCC 6803
+Cau	GCF_000018865.1	6	Other Terrabacteria phyla (Actinomycetota, Cyanobacteria, Chloroflexota, Deinococcota)	Chloroflexus aurantiacus J-10-fl
+Dra	GCF_020546685.1	6	Other Terrabacteria phyla (Actinomycetota, Cyanobacteria, Chloroflexota, Deinococcota)	Deinococcus radiodurans R1
+Eco_Sakai	GCF_000008865.2	7	Pseudomonadota (Gamma incl. Beta, Alpha)	Escherichia coli O157:H7 Sakai
+Sen	GCF_000006945.2	7	Pseudomonadota (Gamma incl. Beta, Alpha)	Salmonella enterica Typhimurium LT2
+Kpn	GCF_000240185.1	7	Pseudomonadota (Gamma incl. Beta, Alpha)	Klebsiella pneumoniae HS11286
+Cko	GCF_000018045.1	7	Pseudomonadota (Gamma incl. Beta, Alpha)	Citrobacter koseri ATCC BAA-895
+Ecl	GCF_905331265.2	7	Pseudomonadota (Gamma incl. Beta, Alpha)	Enterobacter cloacae
+Csa	GCF_003516125.1	7	Pseudomonadota (Gamma incl. Beta, Alpha)	Cronobacter sakazakii CS-931
+Ype	GCF_000009065.1	7	Pseudomonadota (Gamma incl. Beta, Alpha)	Yersinia pestis CO92 (Yersiniaceae)
+Sma	GCF_030291735.1	7	Pseudomonadota (Gamma incl. Beta, Alpha)	Serratia marcescens ELP1.10 (Yersiniaceae)
+Pat	GCF_000740965.1	7	Pseudomonadota (Gamma incl. Beta, Alpha)	Pectobacterium atrosepticum 21A (Pectobacteriaceae)
+Pmi	GCF_000069965.1	7	Pseudomonadota (Gamma incl. Beta, Alpha)	Proteus mirabilis HI4320 (Morganellaceae)
+Eam	GCF_043228865.1	7	Pseudomonadota (Gamma incl. Beta, Alpha)	Erwinia amylovora EaSmR (Erwiniaceae)
+Vch	GCF_000006745.1	7	Pseudomonadota (Gamma incl. Beta, Alpha)	Vibrio cholerae N16961
+Hin	GCF_000027305.1	7	Pseudomonadota (Gamma incl. Beta, Alpha)	Haemophilus influenzae Rd KW20
+Son	GCF_000146165.2	7	Pseudomonadota (Gamma incl. Beta, Alpha)	Shewanella oneidensis MR-1
+Pae	GCF_000006765.1	7	Pseudomonadota (Gamma incl. Beta, Alpha)	Pseudomonas aeruginosa PAO1
+Aba	GCF_000046845.1	7	Pseudomonadota (Gamma incl. Beta, Alpha)	Acinetobacter baylyi ADP1
+Xca	GCF_013388375.1	7	Pseudomonadota (Gamma incl. Beta, Alpha)	Xanthomonas campestris MAFF106181
+Lpn	GCF_001941585.1	7	Pseudomonadota (Gamma incl. Beta, Alpha)	Legionella pneumophila Philadelphia-1
+Nme	GCF_000008805.1	7	Pseudomonadota (Gamma incl. Beta, Alpha)	Neisseria meningitidis MC58
+Bce	GCF_000009485.1	7	Pseudomonadota (Gamma incl. Beta, Alpha)	Burkholderia cenocepacia J2315
+Cvi	GCF_000022005.1	7	Pseudomonadota (Gamma incl. Beta, Alpha)	Caulobacter vibrioides NA1000
+Csp	GCF_003324715.1	7	Pseudomonadota (Gamma incl. Beta, Alpha)	Cereibacter sphaeroides 2.4.1
+Afa	GCF_000092025.1	7	Pseudomonadota (Gamma incl. Beta, Alpha)	Agrobacterium fabrum C58
+Mca	GCF_000008325.1	7	Pseudomonadota (Gamma incl. Beta, Alpha)	Methylococcus capsulatus Bath
+Ftu	GCF_000833355.1	7	Pseudomonadota (Gamma incl. Beta, Alpha)	Francisella tularensis novicida D9876
+Cbu	GCF_000007765.2	7	Pseudomonadota (Gamma incl. Beta, Alpha)	Coxiella burnetii RSA 493
+Abo	GCF_000009365.1	7	Pseudomonadota (Gamma incl. Beta, Alpha)	Alcanivorax borkumensis SK2
+Cja	GCF_000019225.1	7	Pseudomonadota (Gamma incl. Beta, Alpha)	Cellvibrio japonicus Ueda107
+Noc	GCF_000012805.1	7	Pseudomonadota (Gamma incl. Beta, Alpha)	Nitrosococcus oceani ATCC 19707
+Avi	GCF_000025485.1	7	Pseudomonadota (Gamma incl. Beta, Alpha)	Allochromatium vinosum DSM 180
+Hch	GCF_000012985.1	7	Pseudomonadota (Gamma incl. Beta, Alpha)	Hahella chejuensis KCTC 2396
+Rso	GCF_001587155.1	7	Pseudomonadota (Gamma incl. Beta, Alpha)	Ralstonia solanacearum IBSBF1503
+Bpe	GCF_004008975.1	7	Pseudomonadota (Gamma incl. Beta, Alpha)	Bordetella pertussis H640
+Neu	GCF_054182965.1	7	Pseudomonadota (Gamma incl. Beta, Alpha)	Nitrosomonas europaea DSM 28437
+Cne	GCF_000219215.1	7	Pseudomonadota (Gamma incl. Beta, Alpha)	Cupriavidus necator N-1
+Tde	GCF_054961475.1	7	Pseudomonadota (Gamma incl. Beta, Alpha)	Thiobacillus denitrificans DSM 12475
+Zmo	GCF_000498655.1	7	Pseudomonadota (Gamma incl. Beta, Alpha)	Zymomonas mobilis CP4
+Rpa	GCF_016584445.1	7	Pseudomonadota (Gamma incl. Beta, Alpha)	Rhodopseudomonas palustris RCB100
+Bdi	GCF_001642675.1	7	Pseudomonadota (Gamma incl. Beta, Alpha)	Bradyrhizobium diazoefficiens USDA 110
+Pma	GCF_000009985.1	7	Pseudomonadota (Gamma incl. Beta, Alpha)	Paramagnetospirillum magneticum AMB-1
+Bth	GCF_000011065.1	8	Other phyla (Bacteroidota, Campylobacterota, Desulfobacterota, Myxococcota, Chlorobiota, Aquificota, Planctomycetota, Thermotogota)	Bacteroides thetaiotaomicron VPI-5482
+Fjo	GCF_000016645.1	8	Other phyla (Bacteroidota, Campylobacterota, Desulfobacterota, Myxococcota, Chlorobiota, Aquificota, Planctomycetota, Thermotogota)	Flavobacterium johnsoniae UW101
+Cje	GCF_000009085.1	8	Other phyla (Bacteroidota, Campylobacterota, Desulfobacterota, Myxococcota, Chlorobiota, Aquificota, Planctomycetota, Thermotogota)	Campylobacter jejuni NCTC 11168
+Hpy	GCF_025998455.1	8	Other phyla (Bacteroidota, Campylobacterota, Desulfobacterota, Myxococcota, Chlorobiota, Aquificota, Planctomycetota, Thermotogota)	Helicobacter pylori CHC155
+Gsu	GCF_000007985.2	8	Other phyla (Bacteroidota, Campylobacterota, Desulfobacterota, Myxococcota, Chlorobiota, Aquificota, Planctomycetota, Thermotogota)	Geobacter sulfurreducens PCA
+Mxa	GCF_000012685.1	8	Other phyla (Bacteroidota, Campylobacterota, Desulfobacterota, Myxococcota, Chlorobiota, Aquificota, Planctomycetota, Thermotogota)	Myxococcus xanthus DK 1622
+Dvu	GCF_000015485.1	8	Other phyla (Bacteroidota, Campylobacterota, Desulfobacterota, Myxococcota, Chlorobiota, Aquificota, Planctomycetota, Thermotogota)	Nitratidesulfovibrio vulgaris DP4
+Cte	GCF_000006985.1	8	Other phyla (Bacteroidota, Campylobacterota, Desulfobacterota, Myxococcota, Chlorobiota, Aquificota, Planctomycetota, Thermotogota)	Chlorobaculum tepidum TLS
+Aae	GCF_000008625.1	8	Other phyla (Bacteroidota, Campylobacterota, Desulfobacterota, Myxococcota, Chlorobiota, Aquificota, Planctomycetota, Thermotogota)	Aquifex aeolicus VF5
+Rba	GCF_000196115.1	8	Other phyla (Bacteroidota, Campylobacterota, Desulfobacterota, Myxococcota, Chlorobiota, Aquificota, Planctomycetota, Thermotogota)	Rhodopirellula baltica SH 1
+Tma	GCF_000230655.2	8	Other phyla (Bacteroidota, Campylobacterota, Desulfobacterota, Myxococcota, Chlorobiota, Aquificota, Planctomycetota, Thermotogota)	Thermotoga maritima MSB8
+Mja	GCF_000091665.1	9	Archaea	Methanocaldococcus jannaschii DSM 2661
+Hsa	GCF_000006805.1	9	Archaea	Halobacterium salinarum NRC-1
+Sso	GCF_000007005.1	9	Archaea	Saccharolobus solfataricus P2

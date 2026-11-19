@@ -49,8 +49,9 @@ Prototype surprise (`scripts/module_surprise.py`): module prevalence p among the
 (Beta(1,1)); present -log2 p, absent -log2(1 - p c), c = bin completeness from persistent families.
 
 - UBA9145: both Chesterfield bins carry 36 modules found in none of the 52 public genomes (5.75 bits
-  each), led by two flagellar gene sets (FliA sigma factor, flagellar system and basal-body rod
-  proteins); none on geNomad plasmid/virus contigs. Either a motile local population or contamination
-  shared by the two overlapping co-assemblies: the next check is per-sample coverage of these modules
-  against the bin's core.
+  each). **Corrected later the same day** (docs/experiments/coverage_test.md, pangenome_survey.md,
+  bin_cleaning.md): 21 of the 36 are contamination (reads from samples where the population is absent,
+  or no reads; the two bins are the same contigs from overlapping co-assemblies). The flagellar modules
+  are thin (3 annotated flagellar genes) and are carried by about half the population at most; the
+  "motile local population" reading is retired.
 - MAG-120531: one 4-family module (hypothetical proteins) in both bins and no public genome.
