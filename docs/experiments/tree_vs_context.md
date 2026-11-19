@@ -251,3 +251,42 @@ $S/metapanclust/pangbank_scale/sel/species_A.tsv sel`. It is deterministic (seed
   - `test2/`: the end-to-end test (`out/res`, `out/agg`, `logs`, `aggregate.txt`);
   - `test3/`: prep and skani timing for the 318-genome species;
   - `test/`, `probe/`: earlier iterations.
+
+## Results: grex run (job 8190397, 2 nodes, 200 species / 33 phyla, 2026-11-19)
+
+Full tables: `tree_vs_context_results.txt`; per-genome discordance list on grex and in
+`/data/scratch/metapanclust_data/tree_vs_context/grex_results/out/`.
+
+**1. Gene content is the best relatedness measure.** The gene-content (Jaccard) tree is the single best relatedness
+predictor for 62-65% of species at N = 25, rising to 97-98% at N >= 200; it beats the best sequence-based predictor
+(ANI or core-protein distance) by a median 1% (N = 25) to 11% (N = 400) of prevalence loss. Trees beat kernels on
+every measure by 9-25 points, so the earlier Jaccard-kNN baseline understated relatedness by about half.
+
+**2. Genuine context gain is real and grows with N** (median % of prevalence loss; family / module targets):
+
+| N | context (lr) | all relatedness | unique to context beyond all relatedness | beyond sequence relatedness only |
+|---|---|---|---|---|
+| 25 | 26.4 / 33.1 | 18.5 / 23.0 | 5.5 / 8.5 | 7.7 / 10.2 |
+| 100 | 51.4 / 53.5 | 45.1 / 42.8 | 6.6 / ~10 | 10.4 / 14.9 |
+| 400 | 70.0 / 67.8 | 56.4 / 55.9 | 11.1 / ~12 | 16.3 / 18.5 |
+
+Most of the context model's gain is shared with relatedness, but 83-100% of species gain more than 1 point from
+context beyond all relatedness, and that unique part grows with N. Feeding relatedness into the context model
+adds nothing (lr_relall = lr): it already learns clade structure from gene content.
+
+**3. The measures disagree substantially.** Median Spearman between pairwise distances: AAI-Jaccard 0.67,
+ANI-AAI 0.51, ANI-Jaccard 0.50. A genome's GC deviation from its species median tracks how outlying it is in gene
+content (median rho 0.34) more than in ANI (0.12) or AAI (0.25).
+
+**4. Discordant genomes (937 of 38,287).**
+- Outlier by gene content but typical by ANI (502 genomes, 111 species): median |GC deviation| 0.57 vs 0.11 for the
+  rest. These are mostly MAGs (e.g. gut CAG-873, Hominicoprocola); the likeliest explanation is contamination or
+  chimerism adding foreign genes and shifting GC, not biology.
+- Outlier by ANI but typical by gene content (250 genomes, 79 species): GC deviation like the rest (0.13 vs 0.11).
+- In every discordant class the gene-content tree predicts the genome's content better than the sequence trees
+  (e.g. 0.21 vs 0.27 bits for ANI-outlier/gene-content-typical genomes).
+
+**Scope note on the Marine Group I example:** this run compares genomes *within* species, so it cannot test the
+cross-genus case (GC-shifted coral symbiont MGI placed as phylogenetic outliers while gene content shows close
+relationship). Within species, GC deviation goes with gene-content outlierness, mostly from MAG quality. The MGI
+question needs a between-species version (genus- or family-level trees vs gene-content similarity across species).
