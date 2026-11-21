@@ -1,7 +1,7 @@
 # Between species: GTDB tree vs gene content (design, local test, grex submission, 2026-11-20)
 
-Status: scripts pass a local test on one clade (Nitrososphaeria, 16 species). The 18-clade grex run is
-downloading its inputs and submits itself when the download finishes. Numbers here are from the test only.
+Status: done. grex job 8194548 (18 clades, 600 species, about 45 min on one node). Results below; full tables in
+[xsp_tree_vs_content_results.txt](xsp_tree_vs_content_results.txt).
 
 ## Question
 
@@ -80,3 +80,54 @@ One clade of 16 species decides nothing; the grex run has 18 clades and 600 spec
 downloads). `logs/download.log`; the download wrapper submits `code/run_grex.sbatch` (one genoa node: prep for
 all species with 150 workers, then all 18 clades at once with 10 threads each). Results land in `out/res/`;
 aggregate with `aggregate.py out/res`.
+
+## Results (grex, 18 clades, 600 species)
+
+**1. Between species, the GTDB tree is the best relatedness predictor, but only just ahead of gene content.**
+Median % of prevalence log loss removed over clades: tree_gtdb 41.8, tree_jac 41.5, tree_aai 37.6; kernels
+17-29. The GTDB tree wins in 13/18 clades and for 64% of species (median 0.007 bits per target better than the
+gene-content tree, p 1e-12). Core AAI is worst (GTDB better for 79% of species). This reverses the within-species
+result, where gene content beat sequence measures for 62-98% of species. Trees beat kernels at both scales.
+
+**2. Stacking relatedness measures hurts at this scale** (relseq 38.0, relall 38.1, below tree_gtdb alone):
+6 logits fitted on 15-39 training species overfit. Pick one tree; do not stack.
+
+**3. Context still adds.** `lr` alone removes 44.4%, more than any relatedness predictor, and beats `relall`
+for 71% of species; the 50/50 average with relatedness is best (46.7, +1.4 over the better of the two). The
+caveat from the test stands: some of `lr`'s gain may be co-occurring split OGs the homology mask misses.
+
+**4. GC shifts do not make the GTDB tree worse on average.**
+- |GC deviation| does not predict whether gene content beats the GTDB tree (Spearman 0.05, p 0.23; 11/18
+  clades positive). In the > 10-point GC class gene content wins for 44% of species against 35% below 2 points:
+  a weak trend in the MGI direction, not a reversal.
+- GC deviation barely tracks GTDB root-to-tip length (Spearman 0.08, p 0.06), so composition-driven long
+  branches are not common in these GTDB trees.
+- After removing the part explained by gene content, the GTDB distance carries little GC signal (median
+  Spearman 0.08 with |ΔGC|).
+- The ten "tree outlier, content typical" species are mostly sister pairs that sit together on a long branch
+  (Gilliamella apicola, Campylobacter_B ureolyticus, Bifidobacterium piotii/vaginale, Alteromonas). Their
+  nearest neighbour is the same under both measures, and the GTDB tree predicts 9 of the 10 better.
+
+**5. MGI-like cases exist but are rare.** The clearest is *Taylorella equigenitalis* (Burkholderiaceae, GC 37.5
+in a family at about 64): its GTDB nearest neighbour is Achromobacter (30 GC points away), its gene-content
+nearest neighbour is UBA954 (16.5 points away), and gene content predicts its content better (0.31 vs 0.36
+bits). UBA629 (Lachnospiraceae, GC −14.5, root-to-tip z 3.4, the longest branch in the run) is similar (0.32 vs
+0.34). The opposite also occurs: the GC-shifted UBA183 pair in Nitrososphaeria (61-63% GC) and Gilliamella
+(−21 GC) are predicted better by the GTDB tree.
+
+**6. Nitrososphaeria / Marine Group I.** GTDB and gene content tie (46.0 vs 44.0%). Among the Nitrosopumilaceae,
+gene content is slightly better for N. limneticus (0.28 vs 0.29 bits) and Nitrosopelagicus brevis (0.33 vs
+0.36, the one MGI species whose nearest neighbour differs: Nitrosopumilus limneticus by content,
+Nitrosopelagicus sp013390765 by GTDB). Neither is a large effect, and the coral-symbiont MGI are not in PanGBank.
+
+## What this means for the model
+
+- **Use the measure that fits the scale.** Within a species: gene-content tree (tree_vs_context). Across species
+  (genus/family priors for species with few or no genomes, level-1 shrinkage): the GTDB tree, which is free
+  for any GTDB-Tk-placed bin. The two are within 1% of each other between species, so a gene-content tree is an
+  acceptable fallback for bins GTDB-Tk cannot place.
+- **Flag discordance rather than pick a winner per species.** Species whose GTDB and gene-content nearest
+  neighbours disagree (238/600) are where a single tree is least safe; averaging the two trees' predictions is
+  cheap to test there (not done here).
+- Your MGI pattern (sequence-tree outlier, close by gene content, gene content right) does occur (Taylorella,
+  UBA629), but at family scale it is the exception, and GC shift alone does not predict it.

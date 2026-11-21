@@ -1,0 +1,146 @@
+# between-species tree vs gene content: 18 clades, 600 species
+
+## 1. % of prevalence loss removed (leave-one-species-out; mean over species within clade)
+
+                      species  prev_bits  ker_gtdb  tree_gtdb  ker_aai  tree_aai  ker_jac  tree_jac  relseq  relall    lr  avg_relseq  avg_relall
+clade                                                                                                                                            
+Alteromonadaceae           26        0.7      46.7       57.8     30.1      54.4     33.0      57.4    59.2    59.8  63.5        64.7        65.0
+Bifidobacteriaceae         24        0.7      25.0       37.1     17.4      32.1     20.9      35.0    32.4    33.2  43.6        42.0        42.3
+Burkholderiaceae           40        0.6      28.6       42.3     14.7      40.0     20.4      42.9    38.0    38.2  48.5        49.2        49.3
+Campylobacteraceae         31        0.6      47.6       67.1     37.7      64.3     38.7      64.8    68.5    68.8  71.7        72.3        72.5
+Enterobacteriaceae         40        0.6      28.4       39.4     20.8      37.1     20.5      38.1    38.0    38.1  40.1        43.9        44.0
+Flavobacteriaceae          40        0.5      28.5       43.0     14.0      37.8     24.5      43.1    38.0    41.6  51.0        50.6        51.0
+Gastranaerophilaceae       21        0.7      36.4       47.8     19.6      43.2     27.9      46.7    46.0    47.1  53.5        53.5        54.0
+Helicobacteraceae          25        0.7      50.8       64.2     39.6      61.9     45.9      64.6    67.9    69.2  70.9        70.9        71.5
+Lachnospiraceae            40        0.5      18.4       30.0      8.1      24.0     10.8      27.1    23.9    24.6  28.9        33.0        33.2
+Lactobacillaceae           40        0.5      40.4       53.7     26.4      51.5     29.8      53.3    53.9    54.4  58.7        59.7        60.0
+Mycobacteriaceae           40        0.5      28.3       41.7     14.8      38.5     20.5      40.9    35.5    36.4  44.9        46.4        46.7
+Nitrososphaeria            16        0.8      31.7       46.0     16.2      36.9     27.1      44.0    41.0    43.5  61.8        55.9        56.9
+Pseudomonadaceae           40        0.6      33.7       41.9     24.8      40.7     25.1      42.1    41.0    41.2  43.8        46.4        46.7
+Rhodobacteraceae           40        0.5      13.5       21.7      6.3      17.8      9.9      22.9    16.8    19.2  20.5        26.5        27.1
+Rikenellaceae              30        0.6      22.2       34.3     10.3      28.9     15.8      32.4    32.1    32.7  39.4        40.2        40.5
+Sphingomonadaceae          27        0.6      18.6       26.8      9.1      23.0     12.0      24.2    20.8    20.4  23.4        29.5        29.5
+Streptomycetaceae          40        0.6      22.5       28.8     12.6      27.1     10.3      25.8    26.1    25.4  20.2        30.3        30.0
+Vibrionaceae               40        0.6      29.7       38.1     20.6      37.4     18.0      37.0    35.0    35.3  42.2        44.3        44.5
+
+median over clades:
+ker_gtdb      28.5
+tree_gtdb     41.8
+ker_aai       16.8
+tree_aai      37.6
+ker_jac       20.7
+tree_jac      41.5
+relseq        38.0
+relall        38.1
+lr            44.4
+avg_relseq    46.4
+avg_relall    46.7
+
+## 2. Best relatedness predictor (lowest bits among ker/tree x gtdb/aai/jac)
+
+species:
+best_rel
+tree_gtdb    346
+tree_jac     174
+tree_aai      54
+ker_gtdb      20
+ker_jac        6
+
+clades:
+tree_gtdb    13
+tree_jac      5
+tree_gtdb - tree_jac: median -0.0073 bits/target, tree_gtdb better for 64% of species, Wilcoxon p 1.1e-12
+tree_gtdb - tree_aai: median -0.0135 bits/target, tree_gtdb better for 79% of species, Wilcoxon p 5.9e-50
+tree_aai - tree_jac: median +0.0090 bits/target, tree_aai better for 32% of species, Wilcoxon p 2e-29
+
+## 3. Context beyond relatedness (% of prevalence loss, median over clades)
+
+relseq: rel 38.0, ctx (lr) 44.4, avg 46.4; avg - max(lr, rel) median +1.1
+relall: rel 38.1, ctx (lr) 44.4, avg 46.7; avg - max(lr, rel) median +1.4
+lr better than relall for 71% of species
+
+## 4. Distance correlations (Spearman over species pairs; median and range over clades)
+
+                      count    min    50%    max
+pair                                            
+aai ~ jac              18.0  0.750  0.866  0.932
+dGC ~ aai              18.0  0.101  0.348  0.622
+dGC ~ aai|jac_resid    18.0 -0.266  0.094  0.282
+dGC ~ gtdb             18.0 -0.011  0.351  0.601
+dGC ~ gtdb|jac_resid   18.0 -0.258  0.084  0.372
+dGC ~ jac              18.0  0.117  0.432  0.684
+gtdb ~ aai             18.0  0.569  0.866  0.965
+gtdb ~ jac             18.0  0.540  0.845  0.937
+
+## 5. GC: is the GTDB tree or gene content better for GC-shifted species?
+
+pooled: Spearman(|GC dev|, bits_tree_gtdb - bits_tree_jac) = 0.049 (p 0.23, n 600); positive = gene content gains on GC-shifted species
+per clade: median 0.049, 11/18 positive
+            n  tree_gtdb  tree_aai  tree_jac  jac_better  r2t_z
+gc_class                                                       
+<2        294      0.362     0.377     0.368       0.347 -0.053
+2-5       170      0.342     0.363     0.348       0.365 -0.194
+5-10       93      0.340     0.365     0.345       0.366  0.252
+>10        43      0.300     0.334     0.306       0.442  0.586
+|GC dev| vs GTDB root-to-tip z: Spearman 0.078 (p 0.056) (long branches from composition?)
+
+## 6. Discordant species
+
+tree_out_content_in: 10 species; |GC dev| 4.18 vs 2.04; tree_gtdb 0.242 tree_aai 0.288 tree_jac 0.270 lr 0.185; gene content better for 10%
+content_out_tree_in: 4 species; |GC dev| 5.72 vs 2.05; tree_gtdb 0.385 tree_aai 0.393 tree_jac 0.371 lr 0.349; gene content better for 50%
+nn_differ: 238 species; |GC dev| 1.81 vs 2.15; tree_gtdb 0.387 tree_aai 0.391 tree_jac 0.383 lr 0.381; gene content better for 54%
+
+nearest neighbour differs (gtdb vs jac): 238 species; |GC diff| to GTDB nn 1.27 vs to content nn 1.21 (content nn closer in GC for 55%)
+
+tree outlier, content typical:
+             clade                         species    gc  gc_dev  r2t_gtdb_z                        nn_gtdb  nn_gcdiff_gtdb                         nn_jac  nn_gcdiff_jac  bits_tree_gtdb  bits_tree_jac  bits_lr
+Enterobacteriaceae             Gilliamella apicola 33.61  -20.76       1.918          Gilliamella apicola_N            0.35          Gilliamella apicola_N           0.35         0.14730        0.18922  0.06065
+Enterobacteriaceae           Gilliamella apicola_N 33.96  -20.41       1.798            Gilliamella apicola            0.35            Gilliamella apicola           0.35         0.15287        0.19529  0.06616
+Bifidobacteriaceae          Bifidobacterium piotii 42.28  -17.24       2.188       Bifidobacterium vaginale            0.99       Bifidobacterium vaginale           0.99         0.27712        0.28817  0.14811
+   Nitrososphaeria       Nitrosopumilus limneticus 30.37   -5.28       1.631     Nitrosopumilus sp013390905            2.87     Nitrosopumilus sp013390905           2.87         0.29434        0.27887  0.15696
+Campylobacteraceae     Campylobacter_B ureolyticus 28.97   -4.23       1.845  Campylobacter_B ureolyticus_B            0.11  Campylobacter_B ureolyticus_B           0.11         0.17389        0.23093  0.13836
+Campylobacteraceae   Campylobacter_B ureolyticus_B 29.08   -4.12       1.879    Campylobacter_B ureolyticus            0.11    Campylobacter_B ureolyticus           0.11         0.14870        0.20006  0.12415
+  Alteromonadaceae           Alteromonas macleodii 44.68    2.28       1.595      Alteromonas abrolhosensis            0.12      Alteromonas abrolhosensis           0.12         0.27624        0.29056  0.23198
+  Alteromonadaceae       Alteromonas abrolhosensis 44.57    2.16       1.595          Alteromonas macleodii            0.12          Alteromonas macleodii           0.12         0.22468        0.24166  0.19650
+ Sphingomonadaceae Alteriqipengyuania bathyomarina 65.02    0.72       1.521 Alteriqipengyuania sp964222325            1.57 Alteriqipengyuania sp964222325           1.57         0.44340        0.47235  0.49245
+ Sphingomonadaceae             Qipengyuania citrea 64.30    0.00       1.503             Qipengyuania flava            0.63             Qipengyuania flava           0.63         0.27853        0.31091  0.23035
+
+largest |GC dev| per clade:
+               clade                              species    gc  gc_dev  r2t_gtdb_z                       nn_gtdb  nn_gcdiff_gtdb                        nn_jac  nn_gcdiff_jac  bits_tree_gtdb  bits_tree_jac  bits_lr
+     Nitrososphaeria                   UBA183 sp021827865 63.25   27.61       0.391            UBA183 sp021851265            2.34            UBA183 sp021851265           2.34         0.40069        0.51216  0.29964
+    Burkholderiaceae             Taylorella equigenitalis 37.53  -26.00       0.675    Achromobacter xylosoxidans           30.05            UBA954 sp002293155          16.53         0.36478        0.30861  0.23919
+    Rhodobacteraceae              Amylibacter sp900197625 36.46  -22.06      -0.453       Amylibacter sp000153745            0.23       Amylibacter sp000153745           0.23         0.18202        0.19760  0.08666
+  Enterobacteriaceae                  Gilliamella apicola 33.61  -20.76       1.918         Gilliamella apicola_N            0.35         Gilliamella apicola_N           0.35         0.14730        0.18922  0.06065
+  Bifidobacteriaceae             Bifidobacterium vaginale 41.29  -18.23       1.478        Bifidobacterium piotii            0.99        Bifidobacterium piotii           0.99         0.31904        0.33422  0.18561
+   Sphingomonadaceae                    Zymomonas mobilis 46.12  -18.18      -0.973        Sphingomonas koreensis           19.85       Sphingobium sp025961835          18.30         0.54904        0.55558  0.55340
+     Lachnospiraceae                   UBA629 sp005465875 31.46  -14.52       3.393       Roseburia_C sp910578885           12.17           CAG-194 sp000432915          12.73         0.34223        0.32435  0.23771
+    Lactobacillaceae           Limosilactobacillus pontis 52.82   14.09      -0.616 Limosilactobacillus reuteri_J           14.36 Limosilactobacillus vaginalis          12.32         0.25390        0.25985  0.28523
+    Mycobacteriaceae             Corynebacterium ulcerans 53.33  -12.84       0.910    Corynebacterium silvaticum            1.07    Corynebacterium silvaticum           1.07         0.10905        0.12753  0.06581
+       Rikenellaceae             Mucinivorans sp036648455 48.06  -11.21      -0.676         Rikenella sp910579375           10.51         Rikenella sp910579375          10.51         0.48505        0.48958  0.41889
+  Campylobacteraceae               Campylobacter_A curvus 44.37   11.17      -1.174    Campylobacter_A concisus_C            4.85   Campylobacter_A concisus_AB           4.81         0.37558        0.38443  0.31443
+   Flavobacteriaceae                   RFYP01 sp009921175 45.10    8.96       0.654          MS024-2A sp002292265            4.72          MS024-2A sp002292265           4.72         0.23342        0.21033  0.14470
+    Alteromonadaceae              Alteromonas sp002335925 49.26    6.85       0.621         Alteromonas aggregata            0.47         Alteromonas aggregata           0.47         0.41222        0.39362  0.35986
+        Vibrionaceae                Aliivibrio fischeri_B 38.19   -6.59      -1.572           Aliivibrio fischeri            0.11           Aliivibrio fischeri           0.11         0.19347        0.22458  0.12568
+   Helicobacteraceae              Helicobacter_D apodemus 33.16   -5.74      -1.757       Helicobacter_D pullorum            1.28       Helicobacter_D pullorum           1.28         0.51265        0.52201  0.54409
+    Pseudomonadaceae              Stutzerimonas balearica 64.94    3.96      -1.635        Stutzerimonas frequens            1.38        Stutzerimonas frequens           1.38         0.32328        0.26096  0.17483
+Gastranaerophilaceae Gastranaerophilus phascolarctosicola 38.64    3.76      -1.659      Stercorousia sp001917115            4.61        Scatenecus sp949927415           0.11         0.46151        0.46973  0.44949
+   Streptomycetaceae                 Streptomyces fradiae 74.66    2.67      -0.548     Streptomyces clavuligerus            2.16       Streptomyces bacillaris           2.59         0.59752        0.61528  0.77195
+
+Nitrososphaeria (Marine Group I = Nitrosopumilaceae):
+          clade                      species    gc  gc_dev  r2t_gtdb_z                      nn_gtdb  nn_gcdiff_gtdb                       nn_jac  nn_gcdiff_jac  bits_tree_gtdb  bits_tree_jac  bits_lr
+Nitrososphaeria    Nitrosopumilus limneticus 30.37   -5.28       1.631   Nitrosopumilus sp013390905            2.87   Nitrosopumilus sp013390905           2.87         0.29434        0.27887  0.15696
+Nitrososphaeria     Nitrosothermus koennekei 32.03   -3.61      -1.512 Nitrosocaldus tengchongensis           10.70     Nitrosocaldus schleperae           9.92         0.46144        0.45678  0.36881
+Nitrososphaeria            UBA57 sp002494565 33.04   -2.60       0.078     Nitrosothermus koennekei            1.00         JACIWG01 sp029776125           2.43         0.43778        0.40432  0.32982
+Nitrososphaeria   Nitrosopumilus sp013390905 33.23   -2.41       1.079    Nitrosopumilus limneticus            2.87    Nitrosopumilus limneticus           2.87         0.27194        0.28072  0.12395
+Nitrososphaeria      Nitrosopelagicus brevis 33.39   -2.26       1.107 Nitrosopelagicus sp013390765            2.62    Nitrosopumilus limneticus           3.02         0.36211        0.32523  0.23565
+Nitrososphaeria            TA-21 sp014523495 34.38   -1.27       0.041            TA-21 sp033272285            1.55            TA-21 sp033272285           1.55         0.45030        0.49387  0.34884
+Nitrososphaeria         JBFJMG01 sp041634015 35.44   -0.20       0.410   Nitrosopumilus sp013390905            2.21   Nitrosopumilus sp013390905           2.21         0.42381        0.44737  0.43920
+Nitrososphaeria         JACIWG01 sp029776125 35.47   -0.17      -1.791     Nitrosothermus koennekei            3.44            UBA57 sp002494565           2.43         0.45159        0.43829  0.28134
+Nitrososphaeria            TA-21 sp025923455 35.82    0.17       0.368            TA-21 sp014523495            1.44            TA-21 sp033272285           0.11         0.50899        0.49720  0.37025
+Nitrososphaeria            TA-21 sp033272285 35.93    0.28      -0.002            TA-21 sp014523495            1.55            TA-21 sp025923455           0.11         0.46187        0.46609  0.27069
+Nitrososphaeria Nitrosopelagicus sp013390765 36.01    0.36       0.842         JBFJMG01 sp041634015            0.56      Nitrosopelagicus brevis           2.62         0.35580        0.35306  0.28054
+Nitrososphaeria           UBA164 sp029775955 40.98    5.34      -0.171         JACIWG01 sp029776125            5.51         JACIWG01 sp029776125           5.51         0.51636        0.48778  0.35635
+Nitrososphaeria     Nitrosocaldus schleperae 41.96    6.31      -1.431 Nitrosocaldus tengchongensis            0.77 Nitrosocaldus tengchongensis           0.77         0.42258        0.46308  0.24200
+Nitrososphaeria Nitrosocaldus tengchongensis 42.73    7.09      -1.433     Nitrosocaldus schleperae            0.77     Nitrosocaldus schleperae           0.77         0.43601        0.48271  0.30298
+Nitrososphaeria           UBA183 sp021851265 60.91   25.27       0.392           UBA183 sp021827865            2.34           UBA183 sp021827865           2.34         0.38915        0.50453  0.29019
+Nitrososphaeria           UBA183 sp021827865 63.25   27.61       0.391           UBA183 sp021851265            2.34           UBA183 sp021851265           2.34         0.40069        0.51216  0.29964
