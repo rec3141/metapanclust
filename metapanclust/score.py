@@ -20,7 +20,7 @@ how often each is carried).
 import numpy as np, pandas as pd
 from scipy.stats import poisson
 from .detect import p_intact
-from .tree import level1
+from .tree import level1, platt
 from .context import level2
 
 EPS = 0.002
@@ -60,7 +60,7 @@ def novelty_tail(n_obs, counts, c):
     return m, float(-np.log2(max(nbinom.sf(n_obs - 1, r, pr), 1e-300))) if n_obs > 0 else 0.0
 
 
-def score(ref, genes, contig_lengths, comp=None, folds=5, seed=0, use_context=True):
+def score(ref, genes, contig_lengths, comp=None, folds=5, seed=0, use_context=True, recalibrate=True):
     q_fam, q_unit = observe(ref, genes)
     c_est = estimate_completeness(ref, q_fam)
     c = float(comp) if comp is not None else c_est
@@ -68,7 +68,11 @@ def score(ref, genes, contig_lengths, comp=None, folds=5, seed=0, use_context=Tr
     nU = len(ref.unit_members)
     ku = ref.U.sum(1)
     units = np.flatnonzero(ku > 0)                     # units with no reference carrier left are novel
-    p1 = level1(ref, q_fam, c, units, folds=folds, seed=seed)
+    calib = []
+    p1_raw = level1(ref, q_fam, c, units, folds=folds, seed=seed, calib=calib)
+    # recalibrate the tree posterior on the reference genomes' own leave-one-out predictions
+    cal = platt(calib, ref.comp) if recalibrate else (lambda x: x)
+    p1 = cal(p1_raw)
     p2 = level2(ref, q_fam, c, units) if use_context else np.full(len(units), np.nan)
     p = np.where(np.isnan(p2), p1, 0.5 * p1 + 0.5 * p2)
     L = np.asarray(list(contig_lengths), float)
@@ -84,7 +88,7 @@ def score(ref, genes, contig_lengths, comp=None, folds=5, seed=0, use_context=Tr
     e = bits - H
     pres_dir = q < 0.5
     U = pd.DataFrame({'unit': ref.unit_names[units], 'kind': ref.unit_kind[units], 'n_fam': [len(ref.unit_members[u]) for u in units],
-                      'ref_carriers': ku[units], 'span': ref.unit_span[units].round(0), 'p_tree': p1.round(4),
+                      'ref_carriers': ku[units], 'span': ref.unit_span[units].round(0), 'p_tree_raw': p1_raw.round(4), 'p_tree': p1.round(4),
                       'p_context': np.round(p2, 4), 'p': p.round(4), 'detect': np.round(d, 4), 'q': q.round(5),
                       'observed': y, 'bits': bits.round(3), 'excess': e.round(3), 'direction':
                       np.where(pres_dir, 'presence', 'absence')})
@@ -106,7 +110,7 @@ def score(ref, genes, contig_lengths, comp=None, folds=5, seed=0, use_context=Tr
     ctg['presence_excess'] = ctg.presence_excess.round(3)
     sp = pres_dir; sa = ~pres_dir
     summary = dict(
-        genomes_in_ref=N, units_scored=len(units), completeness=round(c, 4), completeness_est=round(c_est, 4),
+        genomes_in_ref=N, platt_a=round(getattr(cal, 'params', (0, 1))[0], 4), platt_b=round(getattr(cal, 'params', (0, 1))[1], 4), units_scored=len(units), completeness=round(c, 4), completeness_est=round(c_est, 4),
         contigs=len(L), Mb=round(L.sum() / 1e6, 3), genes=len(genes),
         bits_presence=round(bits[sp & y].sum(), 2), bits_absence=round(bits[sa & ~y].sum(), 2),
         excess_presence=round(e[sp].sum(), 2), Zplus=round(e[sp].sum() / np.sqrt(max(V[sp].sum(), 1e-9)), 3),

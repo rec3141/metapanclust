@@ -89,7 +89,7 @@ def _posterior(tree, Y, train, comp):
     return (down[:N, ..., 1] * w[None]).sum(1)
 
 
-def level1(ref, q_fam, q_comp, units, folds=5, seed=0):
+def level1(ref, q_fam, q_comp, units, folds=5, seed=0, calib=None):
     """P(present in the query) for the given units (indices) from the gene-content tree on ref + query.
     q_fam: bool vector of families observed in the query. The distance is Jaccard on accessory families.
     Units are split into `folds` groups; each group's posterior uses a tree whose query placement ignores the
@@ -109,5 +109,32 @@ def level1(ref, q_fam, q_comp, units, folds=5, seed=0):
         F = np.vstack([ref.R[fk].T, q_fam[fk][None]])
         tree = upgma(jaccard_dist(F))
         Y = np.vstack([ref.U[units[sel]].T.astype(float), np.zeros((1, len(sel)))])
-        p[sel] = tree_posterior(tree, Y, obs, comp)[-1]
+        post = tree_posterior(tree, Y, obs, comp)
+        p[sel] = post[-1]
+        if calib is not None: calib.append((post[:N], Y[:N]))
     return p
+
+
+def platt(calib, ref_comp, min_comp=0.95, max_cells=400000, seed=0):
+    """two-parameter recalibration y ~ sigmoid(a + b logit p) fitted on the reference genomes' leave-one-out
+    tree posteriors (complete genomes only, so observed state ~ true state). Returns a function p -> p_cal."""
+    ok = ref_comp >= min_comp
+    if ok.sum() < 5: return lambda p: p
+    P = np.concatenate([c[0][ok].ravel() for c in calib]); Y = np.concatenate([c[1][ok].ravel() for c in calib])
+    if len(P) > max_cells:
+        i = np.random.default_rng(seed).choice(len(P), max_cells, replace=False); P, Y = P[i], Y[i]
+    z = np.log(np.clip(P, 1e-6, 1 - 1e-6) / (1 - np.clip(P, 1e-6, 1 - 1e-6)))
+    w = np.zeros(2)
+    X = np.column_stack([np.ones_like(z), z])
+    for _ in range(50):
+        q = 1 / (1 + np.exp(-np.clip(X @ w, -30, 30)))
+        g = X.T @ (q - Y); H = (X * (q * (1 - q))[:, None]).T @ X + 1e-6 * np.eye(2)
+        st = np.linalg.solve(H, g); w -= st
+        if np.abs(st).max() < 1e-8: break
+    a, b = w
+
+    def f(p):
+        zz = np.log(np.clip(p, 1e-6, 1 - 1e-6) / (1 - np.clip(p, 1e-6, 1 - 1e-6)))
+        return 1 / (1 + np.exp(-np.clip(a + b * zz, -30, 30)))
+    f.params = (float(a), float(b))
+    return f
