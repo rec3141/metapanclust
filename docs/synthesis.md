@@ -428,3 +428,20 @@ Five derivations in docs/theory/ (phylo_prior, merge_test, population_frequency,
   (13/18 clades, 64% of species) but only 0.3 points ahead of gene content (41.8 vs 41.5%); core AAI is worst; GC
   shift does not predict which wins. MGI-like cases exist (Taylorella equigenitalis) but are rare. Use the GTDB tree
   for cross-species priors, the gene-content tree within species.
+
+## Addendum: scorer v0 and CAMI II marine (2026-11-21)
+
+- `metapanclust/` packages the model (reference from PanGBank h5; gene-content tree + context; detection; calibrated
+  excess; novelty against the species). [scorer_v0.md](experiments/scorer_v0.md): on 98 held-out genomes in 9
+  species, novel genes detect 5% congener contamination at AUC 0.92 and the foreign contigs at 0.92; unit-level
+  surprise does not (0.53-0.66); calibration is off (rare units over-predicted about 2×, likely from imprecise
+  placement of incomplete queries).
+- [cami_marine.md](experiments/cami_marine.md), 1,567 real binner bins with an oracle species reference: CheckM2
+  flags contaminated bins far better (AUC 0.965 vs 0.846) and metapanclust adds +0.007 to it. metapanclust
+  estimates completeness better (MAE 5.2 vs 8.2 points; CheckM2 +6.2 biased) and finds other-species contigs
+  (AUC 0.84-0.87). Removing mostly-novel contigs cuts other-species contamination from a median 13% to 0.5% at
+  3.2 points of completeness. Same-species (strain) contamination is invisible to novelty.
+- **Re-scoped roadmap:** (1) genus-level references for the 78% of bins without a PanGBank species (GTDB tree
+  between species); (2) novelty-based contig eviction as the first binning move, tested on all CAMI bins against
+  binner output; (3) coverage/identity for strain mixtures; (4) recalibrate unit surprise on references degraded
+  to the query's completeness before quoting surprise values.

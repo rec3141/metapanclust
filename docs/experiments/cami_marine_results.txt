@@ -1,0 +1,52 @@
+# CAMI II marine: 1567 bins scored (of 7018; bins whose majority genome has a PanGBank species pangenome), 15 binners, 165 genomes, 85 species
+
+contam_kind
+other_species    679
+same_species     487
+clean            401 
+
+## 1. Detecting contaminated bins (AUC; bins >= 50% true completeness)
+
+ threshold   n  positives  ck_contam  novel_bits  novel_excess_per_Mb  Zplus  rare_present  excess_presence  combined_cv  checkm2_only_cv
+      0.02 987        528      0.922       0.830                0.807  0.669         0.671            0.652        0.924            0.918
+      0.05 987        379      0.965       0.846                0.817  0.683         0.669            0.667        0.970            0.963
+      0.10 987        291      0.970       0.861                0.821  0.710         0.697            0.690        0.975            0.966
+
+by contamination kind (>= 5% contamination vs clean < 1%):
+  same_species: n 516, pos 172; ck_contam 0.996, novel_bits 0.833, novel_excess_per_Mb 0.790, Zplus 0.722, rare_present 0.713, excess_presence 0.693
+  other_species: n 551, pos 207; ck_contam 0.975, novel_bits 0.921, novel_excess_per_Mb 0.918, Zplus 0.689, rare_present 0.684, excess_presence 0.682
+
+Spearman with true contamination:
+  ck_contam 0.875, novel_bits 0.658, novel_excess_per_Mb 0.603, Zplus 0.371, rare_present 0.367, excess_presence 0.334
+
+## 2. Completeness: estimate vs truth (mean absolute error, percentage points)
+
+  metapanclust: MAE 5.23, bias +0.08, Spearman 0.949
+  CheckM2: MAE 8.23, bias +6.20, Spearman 0.907
+
+## 3. Contig level: foreign contigs inside contaminated bins
+
+  same_species: 350844 contigs, 142372 foreign; AUC novel_frac 0.464, divergence 0.473, presence_excess 0.419, unanchored 0.472
+     bp share of foreign contigs with novel_frac > 0.5: 0.072; of native: 0.053
+  other_species: 517799 contigs, 309327 foreign; AUC novel_frac 0.844, divergence 0.868, presence_excess 0.273, unanchored 0.787
+     bp share of foreign contigs with novel_frac > 0.5: 0.818; of native: 0.053
+
+## 4. Per binner: median true contamination, CheckM2, novel bits
+
+                                     n  true_contam      ck  novel_bits  Zplus
+binner                                                                        
+concoct0.4.1_marine                 80        0.357   9.750      73.555  1.642
+concoct1.1.0_marine                 75        0.400  23.170      49.320  2.918
+elated_bardeen_0                   104        0.209   5.425      24.425 -4.429
+furious_ardinghelli_12             153        0.135   3.880      21.160 -2.845
+furious_ardinghelli_18             153        0.142   3.810      19.290 -2.495
+furious_ardinghelli_3              155        0.135   3.750      21.160 -2.357
+furious_pare_0                     120        0.028   1.475      31.385 -0.895
+grave_torvalds_1                    85        0.006   0.190       3.140 -4.281
+maxbin2.0.2_marine                 111        0.216   5.300      24.810 -2.952
+metabat0.25.4-veryspecific_marine   52        0.308   0.520      15.425 -1.776
+pensive_sinoussi_0                 146        0.081   3.375      17.930 -2.625
+sharp_bardeen_0                    101        0.005   0.280       3.170 -4.281
+sleepy_ptolemy_4                    54        0.035   1.845       7.585 -4.518
+sleepy_ptolemy_4x                   54        0.013   1.230       4.950 -3.670
+vamb_fa045c0_marine_l2000          124        0.001   0.240       8.265 -3.122
