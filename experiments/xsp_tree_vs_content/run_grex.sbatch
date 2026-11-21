@@ -37,7 +37,8 @@ run_clade() {
     cl=$1
     [ -e out/res/$cl.done ] && return 0
     ids=$(awk -F'\t' -v c=$cl '$1==c{print $2}' sel/clades.tsv | paste -sd,)
-    timeout 10000 py clade $cl $BASE/sel/trees/$cl.nwk $BASE/out --ids $ids --threads $THREADS \
+    timeout 10000 singularity exec -B $S $SIF env OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 \
+        MKL_NUM_THREADS=1 python $BASE/code/worker.py clade $cl $BASE/sel/trees/$cl.nwk $BASE/out --ids $ids --threads $THREADS \
         --clades $BASE/sel/clades.tsv > logs/tasks/clade_$cl.log 2>&1
     echo "$(date +%T) $cl exit $?"
 }
