@@ -21,6 +21,7 @@ def main():
     a = sub.add_parser('eval'); a.add_argument('refdir'); a.add_argument('frefdir'); a.add_argument('outdir')
     a.add_argument('--n', type=int, default=20); a.add_argument('--threads', type=int, default=4)
     a.add_argument('--no-context', action='store_true'); a.add_argument('--seed', type=int, default=1)
+    a.add_argument('--shard', help="'i/k': run every k-th held-out genome starting at i")
     x = ap.parse_args()
     if x.cmd == 'ref':
         from .ref import build
@@ -40,7 +41,8 @@ def main():
     elif x.cmd == 'eval':
         from .simulate import run
         os.makedirs(x.outdir, exist_ok=True)
-        run(x.refdir, x.frefdir, x.outdir, n=x.n, threads=x.threads, use_context=not x.no_context, seed=x.seed)
+        run(x.refdir, x.frefdir, x.outdir, n=x.n, threads=x.threads, use_context=not x.no_context, seed=x.seed,
+            shard=x.shard)
 
 
 if __name__ == '__main__':

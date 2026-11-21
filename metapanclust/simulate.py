@@ -73,14 +73,18 @@ def foreign_map(refdir, frefdir, work, threads=4):
 
 
 def run(refdir, frefdir, outdir, n=20, comps=(0.7, 0.9), contam=(0.05, 0.1, 0.2), seed=1, threads=4,
-        use_context=True):
+        use_context=True, shard=None):
     rng = np.random.default_rng(seed)
     ref = Ref(refdir); G = Genes(refdir)
     fref = Ref(frefdir); FG = Genes(frefdir)
     fmap = foreign_map(refdir, frefdir, f'{outdir}/foreign_map', threads)
+    os.makedirs(outdir, exist_ok=True)
     N = len(ref.genomes)
     cand = np.flatnonzero(ref.comp >= 0.95)
     held = rng.choice(cand, min(n, len(cand)), replace=False)
+    if shard:                                   # 'i/k': every k-th held-out genome starting at i
+        i, k = map(int, shard.split('/')); held = held[i::k]
+        rng = np.random.default_rng(seed * 1000 + i)
     rows, crow = [], []
     for j in held:
         keep = np.ones(N, bool); keep[j] = False
