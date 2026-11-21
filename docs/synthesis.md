@@ -410,3 +410,18 @@ Five derivations in docs/theory/ (phylo_prior, merge_test, population_frequency,
 - **operon_evidence:** cluster_model P2 fails as stated (summed independent evidence 0.682 E. coli, 0.593 B. subtilis vs best panels 0.878/0.877): evidence is strongly correlated across lineages (fitted weight 0.02-0.04); per-pair rate heterogeneity is needed, and the break term needs an independent homology search.
 - **calibrated_check:** Z+ drops in the two heavily contaminated bins but across 45 cleaned bins barely beats removing random contigs of equal length (p = 0.074); AUC 0.955 vs CheckM2 not confirmed by coverage labels — CAMI needed. Chow-Liu correction works when a near-duplicate genome is in the reference (224 -> 29-42 bits), not for blocks seen nowhere else.
 - **phylo_prior_check:** in Marinisoma, genus shrinkage helps only at m = 1 (crossover m* ~1-2, earlier than predicted ~3); the ancestral-state-first predictor is best at m = 1-3; at m >= 5 a two-state species-only model wins. P1 (distance beats rank) weakly supported on 49 placeable Chesterfield bins.
+
+## Addendum: relatedness for level 1 (2026-11-20)
+
+- **Decision: within a species, relatedness comes from gene content.** In the 200-species grex run
+  ([tree_vs_context.md](experiments/tree_vs_context.md)) a UPGMA tree on accessory-family Jaccard (targets masked)
+  was the best single relatedness predictor of held-out content for 62-65% of species at N = 25 and 97-98% at
+  N ≥ 200, ahead of CDS-ANI and core-protein distance, and trees beat kernels by 9-25 points. Level 1 uses the
+  gain/loss chain on a gene-content tree; sequence trees are kept as diagnostics. Context still adds 5.5-11
+  points beyond all relatedness (families), growing with N, so level 2 stays.
+- **Within species, GC-deviant genomes are gene-content outliers, not ANI outliers,** and look like MAG
+  contamination (502 genomes; GC deviation 0.57 vs 0.11). Gene-content relatedness must therefore be computed
+  on cleaned bins, or it will put contaminated MAGs on long branches.
+- **Between species** (the PI's Marine Group I case: GC-shifted, sequence-tree outlier, close by gene content)
+  is the open question. [xsp_tree_vs_content.md](experiments/xsp_tree_vs_content.md) compares the GTDB tree,
+  core AAI and orthogroup content across 600 species in 18 clades (grex, submitted 2026-11-20).
