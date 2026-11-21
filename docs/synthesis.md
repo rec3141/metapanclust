@@ -424,4 +424,7 @@ Five derivations in docs/theory/ (phylo_prior, merge_test, population_frequency,
   on cleaned bins, or it will put contaminated MAGs on long branches.
 - **Between species** (the PI's Marine Group I case: GC-shifted, sequence-tree outlier, close by gene content)
   is the open question. [xsp_tree_vs_content.md](experiments/xsp_tree_vs_content.md) compares the GTDB tree,
-  core AAI and orthogroup content across 600 species in 18 clades (grex, submitted 2026-11-20).
+  core AAI and orthogroup content across 600 species in 18 clades. Result: between species the GTDB tree is best
+  (13/18 clades, 64% of species) but only 0.3 points ahead of gene content (41.8 vs 41.5%); core AAI is worst; GC
+  shift does not predict which wins. MGI-like cases exist (Taylorella equigenitalis) but are rare. Use the GTDB tree
+  for cross-species priors, the gene-content tree within species.
