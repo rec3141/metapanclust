@@ -53,3 +53,16 @@ metapanclust's novelty signal added only +0.007 to CheckM2 ([cami_marine.md](cam
 - Lineage-specific marker sets (CheckM's lineage workflow, or GTDB-Tk placement) would close most of the gap to
   CheckM2 on completeness and contamination.
 - An RNA field from barrnap and tRNAscan-SE (both in the danaSeq container) would make the HQ tier reachable.
+
+## Rerun with PR #1 (`ea0c4f9`) and issues filed
+
+PR #1 changes `STEALTH_CHIMERA_ALERT` to optimistic purity. Rerun on the same 300 bins, the alert still fires on 13.2%
+of clean bins (14.2% before). 9 of the 14 clean-bin alerts fail at species rank only, where Kraken2 splits a CAMI
+new species or new strain across congeners. AUCs and tiers are unchanged.
+
+The CLI's ≥95% Hoeffding interval contains the true bp-completeness for 88% of bins: 92% of clean bins and 80% of
+bins with ≥ 10% contamination.
+
+Filed: maglean #8 (stealth-chimera false positives) and #9 (dilution alert not discriminating). Commented with
+real-data numbers on #4 (interval coverage), #5 (domain-level marker family against CheckM2) and #6 (first real-MAG
+run; converter location).
