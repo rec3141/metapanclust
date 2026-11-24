@@ -464,3 +464,10 @@ Five derivations in docs/theory/ (phylo_prior, merge_test, population_frequency,
   candidates for genomes the profile missed. Each binning move (assign, evict, merge) is scored by how it
   changes the board's total surprise. This connects stage 2 (expected content), stage 4 (population
   frequencies) and stage 5 (binning by surprise) into one object.
+- **A genus confusion matrix for composition binning.** On GTDB genomes (fragments), measure which genera separate
+  cleanly in 5-mer t-SNE space and which are confused with each other: a genus × genus confusion matrix from
+  fragment-level nearest-neighbour or cluster assignment, over the same repeated runs as the fragment-outlier idea
+  above. Use it to bin in two stages. First draft genus-level bins, trusting composition only where the matrix
+  says the genus separates and merging confusable genera into one draft group. Then refine each draft to
+  species with gene content (genus references, cami_marine.md), coverage and per-gene identity. The matrix also
+  tells the puzzle board which rows composition alone can fill.

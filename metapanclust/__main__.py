@@ -15,6 +15,10 @@ def main():
     ap = argparse.ArgumentParser(prog='metapanclust')
     sub = ap.add_subparsers(dest='cmd', required=True)
     a = sub.add_parser('ref'); a.add_argument('h5'); a.add_argument('refdir')
+    a.add_argument('--max-genomes', type=int, default=400)
+    a = sub.add_parser('ref-clade', help='genus reference pooled from several species pangenomes')
+    a.add_argument('refdir'); a.add_argument('h5', nargs='+'); a.add_argument('--names', help='comma-separated species')
+    a.add_argument('--max-genomes', type=int, default=400); a.add_argument('--threads', type=int, default=4)
     a = sub.add_parser('score'); a.add_argument('refdir'); a.add_argument('fasta'); a.add_argument('out')
     a.add_argument('--comp', type=float); a.add_argument('--threads', type=int, default=4)
     a.add_argument('--no-context', action='store_true')
@@ -25,7 +29,11 @@ def main():
     x = ap.parse_args()
     if x.cmd == 'ref':
         from .ref import build
-        print(json.dumps(build(x.h5, x.refdir)))
+        print(json.dumps(build(x.h5, x.refdir, max_genomes=x.max_genomes)))
+    elif x.cmd == 'ref-clade':
+        from .clade import build_clade
+        names = x.names.split(',') if x.names else [os.path.basename(h) for h in x.h5]
+        print(json.dumps(build_clade(x.h5, names, x.refdir, max_genomes=x.max_genomes, threads=x.threads)))
     elif x.cmd == 'score':
         import pandas as pd
         from .ref import Ref

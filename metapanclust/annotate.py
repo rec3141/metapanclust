@@ -63,9 +63,11 @@ def map_to_ref(faa, refdir, work, threads=4, min_id=0.8, cov=0.8):
 
 
 def annotate(fasta, refdir, work, threads=4):
+    import json
     os.makedirs(work, exist_ok=True)
     genes, lengths = call_genes(fasta, f'{work}/query.faa')
-    h = map_to_ref(f'{work}/query.faa', refdir, work, threads)
+    info = json.load(open(f'{refdir}/ref.json')) if os.path.exists(f'{refdir}/ref.json') else {}
+    h = map_to_ref(f'{work}/query.faa', refdir, work, threads, min_id=float(info.get('map_id', 0.8)))
     genes['fam'] = genes.gid.map(h.fam).fillna(-1).astype(int)
     genes['pident'] = genes.gid.map(h.pident)
     return genes, lengths

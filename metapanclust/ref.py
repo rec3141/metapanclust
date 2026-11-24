@@ -33,18 +33,22 @@ def translate(dna):
     return p.rstrip('*')
 
 
-def build(h5, outdir, min_module_frac=0.5):
+def build(h5, outdir, min_module_frac=0.5, max_genomes=400, seed=0):
     import tables
     import pandas as pd
     os.makedirs(outdir, exist_ok=True)
     H = tables.open_file(h5)
     A = H.root.annotations
     genomes = np.array([x.decode() for x in A.genomes.col('name')])
+    n_all = len(genomes)
+    if n_all > max_genomes:     # large species: a random subset keeps the tree and context models tractable
+        genomes = np.sort(np.random.default_rng(seed).choice(genomes, max_genomes, replace=False))
     gidx = {g: i for i, g in enumerate(genomes)}
-    ctg_g = dict(zip(A.contigs.col('ID').tolist(), [gidx[x.decode()] for x in A.contigs.col('genome')]))
+    ctg_g = dict(zip(A.contigs.col('ID').tolist(), [gidx.get(x.decode(), -1) for x in A.contigs.col('genome')]))
     genes = pd.DataFrame({'gene': A.genes.col('ID'), 'contig': A.genes.col('contig'),
                           'gd': A.genes.col('genedata_id')})
     genes['g'] = genes.contig.map(ctg_g)
+    genes = genes[genes.g >= 0]
     gd = A.genedata
     gdid = gd.col('genedata_id')
     st = np.zeros(gdid.max() + 1, np.int64); sp = np.zeros_like(st)
@@ -118,7 +122,7 @@ def build(h5, outdir, min_module_frac=0.5):
                         unit_names=names, unit_kind=kind, unit_span=span, U=U,
                         unit_members=np.array([','.join(map(str, m)) for m in members], dtype=object))
     H.close()
-    info = dict(h5=os.path.abspath(h5), genomes=len(genomes), families=len(fams), units=len(members),
+    info = dict(kind='species', map_id=0.8, h5=os.path.abspath(h5), genomes_total=n_all, genomes=len(genomes), families=len(fams), units=len(members),
                 modules=len(mods), proteins=len(need))
     json.dump(info, open(f'{outdir}/ref.json', 'w'), indent=1)
     return info
@@ -130,6 +134,9 @@ class Ref:
         self.dir = d
         self.genomes = z['genomes']; self.comp = z['comp']; self.fams = z['fams']; self.part = z['part']
         self.R = z['R']; self.U = z['U']; self.unit_names = z['unit_names']; self.unit_kind = z['unit_kind']
+        self.species = z['species'] if 'species' in z else None      # per genome, clade references only
+        self.info = json.load(open(f'{d}/ref.json')) if os.path.exists(f'{d}/ref.json') else {}
+        self.map_id = float(self.info.get('map_id', 0.8))
         self.unit_span = z['unit_span']
         self.unit_members = [np.array([int(x) for x in s.split(',')]) for s in z['unit_members']]
         self.fam2unit = np.zeros(len(self.fams), np.int64)
@@ -140,4 +147,5 @@ class Ref:
         import copy
         r = copy.copy(self)
         r.genomes = self.genomes[keep]; r.comp = self.comp[keep]; r.R = self.R[:, keep]; r.U = self.U[:, keep]
+        if self.species is not None: r.species = self.species[keep]
         return r

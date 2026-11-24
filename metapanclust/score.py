@@ -45,8 +45,19 @@ def estimate_completeness(ref, q_fam):
 def novelty_counts(ref):
     """per-genome count of families carried only by that genome (leave-one-out novelty), genomes with
     completeness >= 0.9 (all if fewer than 5)"""
-    single = ref.R.sum(1) == 1
-    n = ref.R[single].sum(0)
+    if getattr(ref, 'species', None) is not None:
+        # clade reference: a new species brings its species-private families; count, per genome, the families
+        # carried only by genomes of its own species
+        sp = pd.Series(ref.species)
+        codes = sp.astype('category').cat.codes.values
+        nsp = codes.max() + 1
+        M = np.zeros((ref.R.shape[0], nsp), bool)
+        for k in range(nsp): M[:, k] = ref.R[:, codes == k].any(1)
+        private = M.sum(1) == 1
+        n = (ref.R & private[:, None]).sum(0)
+    else:
+        single = ref.R.sum(1) == 1
+        n = ref.R[single].sum(0)
     ok = ref.comp >= 0.9
     return n[ok] if ok.sum() >= 5 else n
 
