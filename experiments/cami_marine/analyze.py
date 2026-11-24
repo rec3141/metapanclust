@@ -1,6 +1,8 @@
 """CAMI II marine: does metapanclust surprise predict true bin contamination beyond CheckM2?
 
-usage: analyze.py DIR > results.txt
+usage: analyze.py DIR [OUTSUB=out] [BIN_REFS.tsv MODE] > results.txt
+  OUTSUB    subdirectory with the scores (out = species references, out_genus = genus references)
+  MODE      with BIN_REFS.tsv (genus/bin_refs.tsv): only bins of that mode (loso, genus_only)
 DIR holds bins.tsv (truth), sp/genome_species.tsv, out/<bin>.{summary,contigs}.tsv, checkm2_out/quality_report.tsv,
 gsa_pooled_mapping_short.binning (contig -> genome).
 """
@@ -12,13 +14,18 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import cross_val_predict, GroupKFold
 
 d = sys.argv[1]
+sub = sys.argv[2] if len(sys.argv) > 2 else 'out'
+only = None
+if len(sys.argv) > 4:
+    br = pd.read_csv(sys.argv[3], sep='\t'); only = set(br.bin[br['mode'] == sys.argv[4]])
 pd.set_option('display.width', 220); pd.set_option('display.max_columns', 30)
 T = pd.read_csv(f'{d}/bins.tsv', sep='\t')
 sp = pd.read_csv(f'{d}/sp/genome_species.tsv', sep='\t').set_index('genome')
-S = pd.concat([pd.read_csv(f, sep='\t') for f in glob.glob(f'{d}/out/*.summary.tsv')])
+S = pd.concat([pd.read_csv(f, sep='\t') for f in glob.glob(f'{d}/{sub}/*.summary.tsv')])
 S['bin'] = S['bin'].str.replace('.fna', '', regex=False)
 ck = pd.read_csv(f'{d}/checkm2_out/quality_report.tsv', sep='\t').rename(
     columns={'Name': 'bin', 'Completeness': 'ck_compl', 'Contamination': 'ck_contam'})
+T = T[T.bin.isin(only)] if only is not None else T
 X = T.merge(S, on='bin').merge(ck[['bin', 'ck_compl', 'ck_contam']], on='bin', how='left')
 X['species'] = X.genome.map(sp.species)
 X['second_species'] = X.second_genome.map(sp.species)
@@ -26,8 +33,7 @@ X['contam_kind'] = np.where(X.true_contam < 0.01, 'clean',
                             np.where(X.second_species == X.species, 'same_species', 'other_species'))
 X['novel_per_Mb'] = X.novel_genes / X.Mb
 X['novel_excess_per_Mb'] = (X.novel_genes - X.novel_expected) / X.Mb
-print(f'# CAMI II marine: {len(X)} bins scored (of {len(T)}; bins whose majority genome has a PanGBank species '
-      f'pangenome), {X.binner.nunique()} binners, {X.genome.nunique()} genomes, {X.species.nunique()} species\n')
+print(f'# CAMI II marine: {len(X)} bins scored (of {len(T)}; bins with a reference in {sub}), {X.binner.nunique()} binners, {X.genome.nunique()} genomes, {X.species.nunique()} species\n')
 print(X.contam_kind.value_counts().to_string(), '\n')
 
 
@@ -74,7 +80,7 @@ gt = pd.read_csv(f'{d}/gsa_pooled_mapping_short.binning', sep='\t', comment='@',
                  names=['contig', 'genome', 'taxid', 'len']).set_index('contig')
 rows = []
 for b in X[X.true_contam >= 0.05].bin:
-    f = f'{d}/out/{b}.contigs.tsv'
+    f = f'{d}/{sub}/{b}.contigs.tsv'
     if not os.path.exists(f): continue
     c = pd.read_csv(f, sep='\t')
     maj = X.loc[X.bin == b, 'genome'].iloc[0]
@@ -99,4 +105,4 @@ for kind in ('same_species', 'other_species'):
 print('\n## 4. Per binner: median true contamination, CheckM2, novel bits\n')
 print(X.groupby('binner').agg(n=('bin', 'size'), true_contam=('true_contam', 'median'), ck=('ck_contam', 'median'),
                                novel_bits=('novel_bits', 'median'), Zplus=('Zplus', 'median')).round(3).to_string())
-X.to_csv(f'{d}/analysis_bins.tsv', sep='\t', index=False)
+X.to_csv(f'{d}/analysis_bins_{sub}{"_" + sys.argv[4] if only is not None else ""}.tsv', sep='\t', index=False)
