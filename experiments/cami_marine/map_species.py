@@ -10,7 +10,7 @@ import pandas as pd
 
 gdir, cat_f, have_f, out = sys.argv[1:5]
 os.makedirs(out, exist_ok=True)
-G = pd.concat([pd.read_csv(f, sep='\t') for f in glob.glob(f'{gdir}/**/gtdbtk.*.summary.tsv', recursive=True)])
+G = pd.concat([pd.read_csv(f, sep='\t') for f in glob.glob(f'{gdir}/gtdbtk.*.summary.tsv')])
 G['species'] = G.classification.str.split(';s__').str[-1]
 G.loc[G.species.isin(['', 'Unclassified']) | ~G.classification.str.contains(';s__'), 'species'] = ''
 cat = pd.read_csv(cat_f, sep='\t')

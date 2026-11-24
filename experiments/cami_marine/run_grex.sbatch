@@ -27,8 +27,8 @@ export -f mpc; export S SIF BASE
                        && touch bins/.done; }
 echo "$(date) bins: $(ls bins | wc -l)"
 
-# CheckM2 on all bins (64 threads, in the background)
-if [ ! -s checkm2_out/quality_report.tsv ]; then
+# CheckM2 on all bins (64 threads, in the background; SKIP_CHECKM2=1 to leave it to another job)
+if [ ! -s checkm2_out/quality_report.tsv ] && [ -z "${SKIP_CHECKM2:-}" ]; then
   singularity exec -B $S $DSIF bash -c "source /opt/conda/etc/profile.d/conda.sh && \
     conda activate /opt/conda/envs/dana-mag-quality && checkm2 predict -i bins -x fna -o checkm2_out -t 64 \
     --database_path $CK2DB --force" > logs/checkm2.log 2>&1 &
@@ -47,7 +47,7 @@ awk -F'\t' 'NR==FNR{if(FNR>1 && $5!="") sp[$1]=$5; next} FNR>1 && ($5 in sp){pri
   sp/genome_species.tsv bins.tsv > logs/score_tasks.txt
 echo "$(date) scoring $(wc -l < logs/score_tasks.txt) bins"
 xargs -P 120 -L 1 bash -c '[ -e out/$0.summary.tsv ] && exit 0; [ -e refs/$1/mmdb/ref.dbtype ] || exit 0; \
-  timeout 3600 mpc score $BASE/refs/$1 $BASE/bins/$0.fna $BASE/out/$0 --threads 1 > logs/tasks/score_$0.log 2>&1; \
+  timeout 3600 bash -c "mpc score $BASE/refs/$1 $BASE/bins/$0.fna $BASE/out/$0 --threads 1" > logs/tasks/score_$0.log 2>&1; \
   rm -rf out/$0.work' < logs/score_tasks.txt
 echo "$(date) scored: $(ls out/*.summary.tsv 2>/dev/null | wc -l)"
 [ -n "${CK:-}" ] && wait $CK

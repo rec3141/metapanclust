@@ -445,3 +445,22 @@ Five derivations in docs/theory/ (phylo_prior, merge_test, population_frequency,
   between species); (2) novelty-based contig eviction as the first binning move, tested on all CAMI bins against
   binner output; (3) coverage/identity for strain mixtures; (4) recalibrate unit surprise on references degraded
   to the query's completeness before quoting surprise values.
+
+## Future work (ideas from the PI, 2026-11-24)
+
+- **Fragments that do not cluster with their genome.** Cut GTDB genomes into fragments and embed them
+  with fast t-SNE: several runs of 10k iterations each, from different initializations. Find the fragments
+  that consistently fail to co-cluster with the rest of their genome across runs, then look for what
+  those fragments share: MGEs and islands, rRNA operons, GC or codon outliers, particular gene families or
+  clusters, contig position. This gives a reference-scale map of the DNA that composition-based binning will
+  misplace, which is the same population that coverage-first cleaning and the novelty eviction
+  (cami_marine.md) try to catch.
+- **A systematic "puzzle board" for MAG reconstruction.** Take the puzzle metaphor literally: a matrix with
+  one row per genome expected in the sample from GTDB profiling, and one column per approximately 10 kb fragment
+  that genome is expected to carry given its phylogeny. The expectations come from the species pangenome, or a
+  genus/GTDB-tree prior where none exists, with persistent fragments near-certain and accessory ones weighted
+  by p_u. Fill cells with observed contigs as they are placed, by gene-content match, identity and
+  coverage. Empty expected cells then say what is missing, and from where. Contigs that fit no row are
+  candidates for genomes the profile missed. Each binning move (assign, evict, merge) is scored by how it
+  changes the board's total surprise. This connects stage 2 (expected content), stage 4 (population
+  frequencies) and stage 5 (binning by surprise) into one object.
