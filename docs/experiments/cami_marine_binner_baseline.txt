@@ -1,0 +1,16 @@
+                           binner  bins  hq_90_5  q_70_10  mq_50_10  genomes_hq  genomes_mq  binned_bp  correct_bp
+        vamb_fa045c0_marine_l2000   774      290      341       384         290         384      0.642       0.561
+               pensive_sinoussi_0   596      261      359       389         261         389      0.714       0.632
+                   furious_pare_0   672      252      338       387         252         387      0.900       0.636
+           furious_ardinghelli_12   643      239      333       353         239         353      0.804       0.642
+            furious_ardinghelli_3   660      239      334       355         239         355      0.804       0.644
+           furious_ardinghelli_18   653      237      332       366         237         366      0.804       0.657
+                  sharp_bardeen_0   466      187      231       270         187         270      0.644       0.413
+                 grave_torvalds_1   390      178      213       241         178         241      0.644       0.359
+                 elated_bardeen_0   515      176      242       267         176         267      0.624       0.512
+               maxbin2.0.2_marine   516      173      240       266         173         266      0.621       0.511
+                sleepy_ptolemy_4x   274      130      155       162         130         162      0.398       0.317
+                 sleepy_ptolemy_4   279      120      141       151         120         151      0.406       0.314
+              concoct1.1.0_marine   369       79      121       137          79         137      0.804       0.431
+              concoct0.4.1_marine   367       78      119       134          78         134      0.804       0.428
+metabat0.25.4-veryspecific_marine   232       53       75        82          53          82      0.456       0.204
