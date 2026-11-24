@@ -36,6 +36,36 @@ De novo SNV methods treat each sample as a different mixture of the same G strai
 
 The other short-read tools address narrower problems. **StrainFacts** factorises allele counts with "fuzzy" genotypes and scales to more than 10,000 samples. It depends on GT-Pro SNP sites from a reference database, performed poorly on a strain at 3% abundance, and degraded "dramatically" when the strain number was underestimated ([Smith et al. 2022, *Front Bioinform*](https://www.frontiersin.org/journals/bioinformatics/articles/10.3389/fbinf.2022.867386/full)). **inStrain** measures microdiversity and decides whether two samples carry the same strain (popANI ≥99.999% over ≥50% of the genome, ≥5× per compared base). It works on your own dereplicated MAGs but does not phase haplotypes ([Olm et al. 2021, *Nat Biotechnol*](https://pmc.ncbi.nlm.nih.gov/articles/PMC9223867); [inStrain docs](https://instrain.readthedocs.io/en/latest/important_concepts.html)). **MetaStrainer** phases strains within a single sample against a MAG-like reference. It reached 92.1% correct variants, against mixtureS's 39.3%, and held up to about 8× coverage. It caps out at three strains, falls to 64.2% when strain frequencies are equal, and merges strains at ≥99.5% ANI ([Sharaf & Bobay 2026, *Bioinformatics*](https://academic.oup.com/bioinformatics/article/42/6/btag340/8691842)). Reference profilers (StrainGE at 0.1×, StrainScan at ~1× with about 20% better F1 on multi-strain samples) need close references ([van Dijk et al. 2022, *Genome Biol*](https://pubmed.ncbi.nlm.nih.gov/35255937/); [Liao et al. 2023, *Microbiome*](https://pmc.ncbi.nlm.nih.gov/articles/PMC10433603/)). Novel environmental lineages will mostly lack such references. Even on *E. coli*, six profilers gave noticeably different compositions in a 2026 benchmark ([bioRxiv 2026.05.19.726160](https://www.biorxiv.org/content/10.64898/2026.05.19.726160v2); authors not verified).
 
+## What a "strain" means to each tool
+
+The tools do not share a definition of a strain, and their limits depend on that definition.
+
+**Reference-based profilers define a strain by their database or by a fixed threshold.**
+
+| Tool | Unit called a "strain" | What it cannot see |
+|---|---|---|
+| StrainGE, StrainEst | A cluster of reference genomes merged at k-mer Jaccard ≥ 0.95 (≈ 99.89% ANI). The cluster's representative is reported. StrainGE also reports SNVs against it. | Differences within a cluster. Their ~99.9% limit is this clustering cut ([StrainScan, Liao et al. 2023](https://pmc.ncbi.nlm.nih.gov/articles/PMC10433603/)). |
+| StrainScan | Individual reference genomes, found by a hierarchical k-mer search inside those clusters | Strains absent from the database: a novel strain is reported as its nearest reference ([Liao et al. 2023](https://pmc.ncbi.nlm.nih.gov/articles/PMC10433603/)) |
+| StrainPhlAn 4 | The dominant consensus haplotype of a species' marker genes in one sample; strains are compared on marker phylogenies | Mixtures: one strain per species per sample. "Same strain" between samples uses a species-specific distance threshold (from memory, unverified). |
+| inStrain | An operational between-sample call: popANI ≥ 99.999% over ≥ 50% of the genome, ≥ 5× per compared base. References dereplicated to 95-98% ANI (e.g. with dRep). | Strains within one sample, since it measures microdiversity but does not phase ([inStrain docs](https://instrain.readthedocs.io/en/latest/important_concepts.html)) |
+
+"Resolves to ~99.9% ANI" for these tools therefore means "does not split genomes the database already merged". It is not a statement about biology. For a novel environmental taxon with no close reference, StrainGE, StrainEst and StrainScan return the nearest reference genome, which can be well over 5% divergent. inStrain stays usable because it runs on the project's own MAGs.
+
+**De novo tools define a strain by evidence in the data:**
+
+- DESMAN and STRONG: a haplotype of core genes whose allele frequencies or unitig coverages covary across samples.
+- Strainberry, Strainy and Floria: a read-phased haplotype.
+
+Their strains exist only where the data separate them: roughly ≥ 0.4-0.5% divergence at the variable sites, and ≥ 5× per sample (SNV methods) or ≥ 20× per strain (long-read phasing). Below that, two biological strains are reported as one.
+
+**For danaSeq**, a strain is best defined operationally, by the data available:
+
+1. A distinct phased haplotype where coverage allows it.
+2. Otherwise a distinct accessory-gene complement with its own coverage profile across samples.
+3. Between samples, the inStrain popANI call against our own MAGs.
+
+A database-cluster definition carries little meaning for novel taxa.
+
 ## Coverage deconvolution is one linear model with a geometric catch
 
 Every multi-sample deconvolution tool fits the same model: feature coverage ≈ Σ over strains of (presence indicator × strain abundance). DESMAN's accessory-gene step states it exactly. Gene coverage is Poisson with mean λ_{f,s} = Σ_g η_{f,g} γ_{g,s}, where η is binary presence and γ_{g,s} is strain coverage in sample s. The authors note that the method "could equally well be applied to either contigs or genes" ([Quince et al. 2017](https://pmc.ncbi.nlm.nih.gov/articles/PMC5607848)). The tools differ in what they use as features. STRONG uses graph unitigs. StrainPanDA uses gene-family depth against a reference pangenome, fitted by sparse NMF, and recommends **at least 10 samples and species relative abundance above 1%**. It struggles with strains "lacking strain-unique features" ([Hu et al. 2022, *iMeta*](https://pmc.ncbi.nlm.nih.gov/articles/PMC10989911)). MSPminer clusters co-abundant genes using a proportionality measure that separates species core from accessory genes, with input filtered to genes having >6 reads in ≥3 samples ([Plaza Oñate et al. 2019, *Bioinformatics*](https://pmc.ncbi.nlm.nih.gov/articles/PMC6499236)). MIDAS v3 + StrainPGC call gene content per strain from the ratio of gene depth to species depth plus a correlation score across samples. They note that strain-specific genes show a "decreased depth ratio … when other strains of the same species are also abundant" ([Smith et al. 2025, *Genome Res*](https://genome.cshlp.org/content/35/5/1247)). The two kinds of signal complement each other. Gene-content methods cannot split strains with identical accessory genomes, and SNV methods cannot split strains that are identical on the core.
