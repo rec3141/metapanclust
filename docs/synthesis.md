@@ -471,3 +471,25 @@ Five derivations in docs/theory/ (phylo_prior, merge_test, population_frequency,
   says the genus separates and merging confusable genera into one draft group. Then refine each draft to
   species with gene content (genus references, cami_marine.md), coverage and per-gene identity. The matrix also
   tells the puzzle board which rows composition alone can fill.
+- **Easy taxa first, then the hard ones, by measured variability.** Bin the easy cases first and remove them:
+  genera with one species and one strain in the sample, where composition (idea 3) and gene content agree.
+  Then work through the multi-species and multi-strain taxa systematically. For each remaining genus, first
+  measure how much variation it holds:
+  - between species (ANI and AAI spread, the share of species-private orthogroups from the genus reference);
+  - between strains (SNV density on core genes from read pileups, accessory-gene presence differing between
+    samples, coverage covariance).
+  
+  The measurement then decides the next step:
+  - **Well-separated species** (ANI < 95%): ordinary binning, plus novelty eviction against species references.
+  - **Close species or strains with distinct accessory content:** gene-content and coverage deconvolution; the
+    accessory-to-core coverage ratio per sample (stage 4).
+  - **Strains that differ mainly by SNVs:** stricter, strain-aware reassembly (long-read haplotype-aware
+    assemblers) or remapping to a species representative, with strains resolved from SNV haplotypes rather
+    than as separate bins.
+  
+  Prior work to review before choosing: DESMAN (Quince et al. 2017, strain haplotypes from core-gene SNVs and
+  coverage), STRONG (Quince et al. 2021, strain resolution on the assembly graph with BayesPaths), inStrain (Olm
+  et al. 2021, microdiversity and popANI), StrainPhlAn 4 and StrainGE (reference-based strain tracking),
+  StrainFacts (strain mixtures across samples), and for long reads Strainberry (Vicedomini et al. 2021), Strainy
+  (Kazantseva et al. 2024), Floria (Shaw & Yu 2024) and hifiasm-meta / metaFlye strain modes. Our own pipeline
+  has metaMDBG and Flye; a proper literature pass is needed before committing (not yet done).
