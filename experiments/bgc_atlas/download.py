@@ -1,7 +1,8 @@
 """Download BGC Atlas v2 release files listed in the site's manifest.json, verifying SHA-256.
 
 usage: download.py OUTDIR [--include REGEX ...] [--max-gb N] [--list]
-  default includes: every db/ table, clustering-v3/ (BiG-SLiCE runs, for local query mode), README/RELEASE files.
+  default includes: every db/*.tsv.gz table (not the dump/tar bundles that repeat them), clustering-v3/ (BiG-SLiCE
+  runs, for local query mode), bgc_uuid_source.parquet (BGC -> source assembly/genome), READMEs.
   Region sequence files (regions_nuc.fasta, regions_prot.faa, all_regions_gbk.tar.gz) are left out unless included
   explicitly. Files larger than --max-gb (default 60) are skipped and reported. Resumable (curl -C -), and files whose
   checksum already matches are skipped.
@@ -9,10 +10,11 @@ Data licence: CC BY 4.0 (BGC Atlas annotations); underlying sequences keep their
 """
 import argparse, hashlib, json, os, re, subprocess, sys
 
-BASE = 'https://bgc-atlas.cs.uni-tuebingen.de/downloads'
+BASE = os.environ.get('BGC_ATLAS_URL', 'https://bgc-atlas.ziemertlab.com/downloads')  # mirror of bgc-atlas.cs.uni-tuebingen.de
 ap = argparse.ArgumentParser()
 ap.add_argument('outdir')
-ap.add_argument('--include', nargs='*', default=[r'^db/', r'^clustering-v3/', r'(?i)(readme|release|manifest|sha256sums)'])
+ap.add_argument('--include', nargs='*', default=[r'^db/.*\.tsv\.gz$', r'^clustering-v3/', r'^bgc_uuid_source\.parquet$',
+                                                    r'(?i)readme'])   # db/ bundles (dump, tar) repeat the tables
 ap.add_argument('--max-gb', type=float, default=60)
 ap.add_argument('--list', action='store_true')
 a = ap.parse_args()
