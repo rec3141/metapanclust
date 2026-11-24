@@ -22,14 +22,14 @@ def read(t, cols):
 G = read('genomes', ['accession', 'assembly_id', 'source_type', 'collection', 'checkm_completeness',
                      'checkm_contamination', 'genome_quality', 'genome_size', 'domain', 'phylum', 'class', 'order',
                      'family', 'genus', 'species', 'bgc_count'])
-B = read('bgcs', ['id', 'assembly', 'start_pos', 'end_pos', 'product_category', 'is_complete'])
+B = read('bgcs', ['id', 'assembly', 'contig', 'start_pos', 'end_pos', 'product_category', 'is_complete'])
 F = read('bgc_features', ['bgc_id', 'contig_length', 'contig_edge'])
 M = read('bgc_gcf', ['bgc_id', 'gcf_id', 'is_primary'])
 M = M[M.is_primary.astype(str).isin(['t', 'True', 'true'])].drop(columns='is_primary')
 X = (B.rename(columns={'id': 'bgc_id'}).merge(F, on='bgc_id', how='left').merge(M, on='bgc_id', how='left')
      .merge(G, left_on='assembly', right_on='assembly_id', how='inner'))
 X['region_len'] = X.end_pos - X.start_pos
-X = X.drop(columns=['assembly', 'assembly_id', 'start_pos', 'end_pos'])
+X = X.drop(columns=['assembly', 'assembly_id'])
 X.to_parquet(f'{out}/genome_gcf.parquet', index=False)
 G.to_parquet(f'{out}/genomes.parquet', index=False)
 
