@@ -66,3 +66,24 @@ bins with ≥ 10% contamination.
 Filed: maglean #8 (stealth-chimera false positives) and #9 (dilution alert not discriminating). Commented with
 real-data numbers on #4 (interval coverage), #5 (domain-level marker family against CheckM2) and #6 (first real-MAG
 run; converter location).
+
+## Rerun with maglean `0e5ca7c` (fixes for #8 and #9)
+
+What changed: the stealth-chimera alert is evaluated at genus rank and above and needs ≥ 50% classified bp; the
+dilution alert fires only when an impure coarser rank (< 90%) is masked at a finer rank; species impurity is exported
+as `species_conservative_impurity_exact`. Rerun on the same 300 bins
+([maglean_cami_results_0e5ca7c.txt](maglean_cami_results_0e5ca7c.txt)):
+
+| true contamination | bins | stealth alert (before → after) | dilution alert (before → after) |
+|---|---|---|---|
+| < 1% | 106 | 13.2% → **1.9%** | 13.2% → **0%** |
+| 1–5% | 55 | 7.3% → 7.3% | 45.5% → 0% |
+| 5–10% | 23 | 17.4% → 8.7% | 52.2% → 0% |
+| ≥ 10% | 116 | 21.6% → 18.1% | 37.9% → 3.4% |
+
+- **Stealth alert:** precision is now 79% (23 of 29 alerts on bins with ≥ 5% true contamination).
+- **Dilution alert:** now specific, but it rarely fires on these data.
+- **Unchanged:** AUCs, estimates and tiers. The exported species impurity reproduces AUC 0.863.
+- **New contig-based interval:** median radius ±30.9%; it contains the true completeness for 93% of bins (99% of
+  clean bins, 85% of bins with ≥ 10% contamination). The marker-set interval stays at 88%.
+- **Provenance:** the binary reported `git_commit` `0b946d1` while built from `0e5ca7c`'s tree. Filed as maglean #10.

@@ -1,0 +1,28 @@
+# MAGLean on CAMI II marine: 300 bins from 15 binners (markers: CheckM domain-level sets; contig taxonomy: Kraken2 standard DB)
+
+## 1. Estimates vs truth (percentage points)
+
+MAGLean  completeness MAE   9.5 bias  -1.4 rho 0.851; contamination MAE  20.8 bias  +1.1 rho 0.457
+CheckM2  completeness MAE   7.0 bias  +4.2 rho 0.891; contamination MAE  14.3 bias  -7.4 rho 0.644
+
+## 2. Detecting contaminated bins (AUC)
+
+ true_contam_ge  positives   n  ck_contam  ml_contam  imp_domain  imp_phylum  imp_class  imp_order  imp_family  imp_genus  imp_species  max_chim
+           0.05        139 300      0.842      0.749       0.690       0.704      0.699      0.752       0.772      0.804        0.863     0.848
+           0.10        116 300      0.871      0.784       0.664       0.676      0.672      0.719       0.745      0.778        0.856     0.842
+
+## 3. Alerts by true contamination
+
+              n  stealth  incoherent  dilution  ml_contam  ck_contam
+true_class                                                          
+<1%         106    0.019       0.094     0.000      0.019      0.335
+1-5%         55    0.073       0.145     0.000      0.034      1.620
+5-10%        23    0.087       0.087     0.000      0.026      1.670
+>=10%       116    0.181       0.172     0.034      0.204     15.880
+
+MIMAG tiers (marker-only; RNA unknown so HQ is impossible):
+true_class                             <1%  1-5%  5-10%  >=10%
+tier                                                          
+Contaminated (Failed MIMAG <10% Cont)    1     5      4     71
+Low-Quality (MIMAG LQ)                  18    10      7     36
+Medium-Quality (MIMAG MQ)               87    40     12      9
